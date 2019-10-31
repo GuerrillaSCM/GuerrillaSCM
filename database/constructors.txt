@@ -7,6 +7,7 @@ class Survey {
     this.creationTime = isNull(survey.creationTime, Date().toISOString());
     this.questions = isNull(survey.questions, []); //contains an array of different question objects. 
     // Position in array would be the order of the questions.
+    this.trigger = isNull(survey.trigger, null); // trigger object containing trigger definition
   }
 }
 
@@ -40,6 +41,19 @@ class Answer {
 class StarResponse {
   constructor(response) {
     this.stars = isNull(response.stars, null); //integer from 1-5 for the number of stars
+  }
+}
+
+class Trigger {
+  constructor(trigger) {
+    this.type = isNull(trigger.type, null); // the type of trigger
+    this.definition = isNull(trigger.definition, null); // sub-object that contains data related to the type.
+  }
+}
+
+class TimerTrigger {
+  constructor(trigger) {
+    this.timer = isNull(trigger.timer, null); //integer > 0 for timer in ms
   }
 }
 
