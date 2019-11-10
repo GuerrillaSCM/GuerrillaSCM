@@ -13,8 +13,6 @@ app.get('/meme/', function (req, res) {
   res.send('yeetus deletus')
 })
 
+app.listen(3000); //Listens for requests (asynchronous!)
 
-    app.listen(3000); //Listens for requests (asynchronous!)
-
-
-    console.log('djfgdksfadskjfahlksdhflkahsdlkjfhalksdhf API running on port: ' + 3000);
+console.log('djfgdksfadskjfahlksdhflkahsdlkjfhalksdhf API running on port: ' + 3000);

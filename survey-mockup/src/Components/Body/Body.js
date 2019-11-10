@@ -42,10 +42,11 @@ const body = () => {
                 <input type="email" className="form-control form-control-sm mb-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Optional Description" />
                 </div>
                 <div className="">
+                <button type="submit" className="btn btn-success text-light mt-1 mb-5">Done</button>
 
                 </div>
                 </form>
-                <button type="button" className="btn btn-success text-light mt-1 mb-5">Done</button>
+                
             </div>
         </div>
     );
