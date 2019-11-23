@@ -1,4 +1,37 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Created by https://www.gitignore.io/api/react,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=react,visualstudiocode
+
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+node_modules
+bower_componets
+
+*.sublime*
+
+psd
+thumb
+sketch
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.gitignore.io/api/react,visualstudiocode# 
+See https://help.github.com/articles/ignoring-files/ 
+for more about ignoring files.
 
 # dependencies
 /node_modules
