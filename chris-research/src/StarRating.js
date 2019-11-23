@@ -40,8 +40,8 @@ const useStyles = makeStyles({
   });
   
   export default function HoverRating() {
-    const value = 2;
     const [hover, setHover] = React.useState(-1);
+    const [value, setValue] = React.useState(2);
     const classes = useStyles();
   
     return (
@@ -53,6 +53,9 @@ const useStyles = makeStyles({
             precision={0.5}
             size={"large"}
             IconContainerComponent={IconContainer}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
           />
         </Box>
       </div>
