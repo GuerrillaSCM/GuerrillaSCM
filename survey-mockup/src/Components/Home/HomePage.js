@@ -4,6 +4,9 @@ import SurveyTable from './SurveyTable'
 
 
 //get user id
+/* 
+    Make requests here?? Need userId, and surveyIds
+*/
 const homePage = () => {
     return(
         <div>

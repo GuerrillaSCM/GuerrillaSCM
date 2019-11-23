@@ -12,10 +12,13 @@ import React, { useState} from 'react';
 import SurveyActions from './SurveyActions';
 import SurveyForm from './SurveyForm';
 
+/*
+    This class is where we do the requests if we are editing a survey.
+    Could potentiall pass in a survey id then do request on that. 
+*/
 export default function SurveyPage (){
 
     //USE CLASS COMPONENT!!! or use useEffect....
-    //need to use a class component here. This is for prototyping only 
     const [questions, setQuestions] = useState([]);
 
     
@@ -31,7 +34,6 @@ export default function SurveyPage (){
     }
 
     const removeQuestionHandler = questionId => {
-        //console.log("removed id: " + questionId)
         setQuestions(prevQuestions => 
             prevQuestions.filter(question => question.id !== questionId));
     }

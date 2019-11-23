@@ -40,6 +40,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+/*
+    param: props.surveyId
+           props.dateCreated
+           props.publishedStatus
+*/
 export default function SurveyActions(props) {
 
   const createNewId = require('uuid/v1');

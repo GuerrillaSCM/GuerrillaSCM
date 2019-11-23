@@ -14,6 +14,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+/*
+    param: props.title
+           props.value
+*/
 function StatisticsCard(props) {
 
     const classes = useStyles();

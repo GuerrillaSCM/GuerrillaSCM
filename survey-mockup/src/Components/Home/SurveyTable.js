@@ -46,7 +46,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-
+/*
+    param: Optional: props.columns
+           props.data (Could be an object that contains the name, status, datacreated........)
+*/
 function SurveyTable() {
 
     const classes = useStyles();
@@ -71,6 +74,7 @@ function SurveyTable() {
                 //type: 'numeric',
             },
         ],
+        //Dummy data
         data: [
             { name: 'Test Survey 1', status: 'Yes', dateCreated: '11/21/2019', responses: 69 },
             { name: 'Test Survey 2', status: 'No', dateCreated: '11/16/2019', responses: 49 },
