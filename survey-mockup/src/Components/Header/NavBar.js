@@ -9,6 +9,10 @@ import SurveyIcon from '@material-ui/icons/Assignment';
 import AnalyticsIcon from '@material-ui/icons/Assessment';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import SurveyPage from '../Survey/SurveyCreationPage';
+import HomePage from '../Home/HomePage';
+import Container from '@material-ui/core/Container'
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,6 +63,7 @@ export default function ScrollableTabsButtonForce() {
   return (
     <div className={classes.root}>
       <AppBar position="static" color="primary">
+      <Container maxWidth="lg">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -66,20 +71,26 @@ export default function ScrollableTabsButtonForce() {
           scrollButtons="on"
           aria-label="scrollable force tabs example"
         >
+          
           <Tab label="Home" icon={<HomeIcon />} {...a11yProps(0)} />
           <Tab label="Survey Creation" icon={<SurveyIcon />} {...a11yProps(1)} />
           <Tab label="Analytics" icon={<AnalyticsIcon />} {...a11yProps(2)} />
+          
         </Tabs>
+        </Container>
       </AppBar>
+      
+      <Container maxWidth="lg">
       <TabPanel value={value} index={0}>
-        
+        <HomePage/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        
+        <SurveyPage/>
       </TabPanel>
       <TabPanel value={value} index={2}>
         
       </TabPanel>
+      </Container>
     </div>
   );
 }

@@ -9,6 +9,13 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItem from '@material-ui/core/ListItem';
 
+/*
+    param: props.question (Question text)
+           props.type (Question type)
+           props.id (Question id) <- doesnt need to be stored. easier to manipulate 
+           data with an id, also serves as the list key which is kinda required.
+*/
+
 const surveyQuestionList = (props) =>{
     return (
         <div className="">
