@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import LikeButton from './Components/LikeButton'
+import LikeButton from './Components/LikeButton/LikeButton'
 //import LikeButton from './Components/LikeButton';
 
 function App() {
