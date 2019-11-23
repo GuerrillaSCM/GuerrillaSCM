@@ -1,7 +1,6 @@
 /*
-    CptS 489, Spring 2019
-    Project: Task Tracker
-    File: server.js
+    GuerrillaSCM Fall 2019
+    File: app.js
 */
 
 var express = require('express');
@@ -9,6 +8,7 @@ var app = express();
 
 const mongoose = require('mongoose');
 const Survey = require('./models/Survey');
+const Question = require('./models/Question');
 const uri = "mongodb+srv://testing:oeXeGlFbH8U1uEjA@guerrillascm-rk5d5.mongodb.net/GuerrillaSCM?retryWrites=true&w=majority";
 mongoose.connect(uri, {
   useNewUrlParser: true
@@ -19,11 +19,7 @@ var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.locals.db = db;
-
-
-
-
+app.locals.db = db; // save the databse somehwere that it can be accessed globally if needed. Not ideal!
 
 db.once('open', function () {
   console.log("Connection Successful!");
@@ -35,17 +31,21 @@ app.listen(3000); //Listens for requests (asynchronous!)
 console.log('API running on port: ' + 3000);
 
 
+//Example get function that tests using the schema
 app.get('/meme/:test', function (req, res) {
   console.log("This bitch aint emtpy, anti-yeet!")
 
   var meme1 = Survey({
     title: "MemeTest" + req.params.test,
     owner: "TestID",
-    published: false, // boolean if the survey is published or not.
+    published: false,
     creationTime: new Date(),
-    questions: [], //contains an array of different question objects. 
-    // Position in array would be the order of the questions.
-    trigger: null // trigger object containing trigger definition
+    questions: [{
+      type: "CommentBox",
+      questionID: 0, 
+      prompt: "What do you think about memes?" 
+    }], 
+    trigger: null
   });
 
   meme1.save(function (err, insertion) {
