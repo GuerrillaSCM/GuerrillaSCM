@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <h3>Some random React App</h3>
       <LikeButton></LikeButton>
-      <TimerTrigger></TimerTrigger>
+      <TimerTrigger timerLength={5}/>
     </div>
   );
 }
