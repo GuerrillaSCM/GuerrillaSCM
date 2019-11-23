@@ -8,7 +8,7 @@ class SurveySchema extends mongoose.Schema {
     super(obj, options);
     this.add({
       title: String,
-      _id: mongoose.Schema.ObjectId,
+      // _id: mongoose.Schema.ObjectId,
       owner: String,
       published: Boolean, // boolean if the survey is published or not.
       creationTime: Date,

@@ -5,7 +5,7 @@ class SurveyResponseSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      _id: Schema.ObjectId, //unique ID for the specific survey response
+      // _id: Schema.ObjectId, //unique ID for the specific survey response
       surveyID: mongoose.Schema.ObjectId, //Unique ID for the parent survey that this is a response to
       creationTime: Date,
       answers: [{ // array of references to answers in the answeres collection.
