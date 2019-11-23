@@ -1,13 +1,12 @@
+/* Enclose container in a browser router */
 import React from 'react';
 import './App.css';
-import NavBar from './Components/Header/NavBar';
-import Body from './Components/Body/Body'
+import Container from './Components/Container/Container'
 
 function App() {
   return (
     <div className="App">
-      <NavBar/>
-      <Body/>
+      <Container/>
     </div>
   );
 }
