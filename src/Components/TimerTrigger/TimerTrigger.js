@@ -3,57 +3,34 @@ const ms = require('pretty-ms')
 
 class TimerTrigger extends React.Component {
     constructor(props) {
-        console.log("Constructing component");
         super(props);
-        this.state = {
-            time: 0,
-            start: Date.now(),
-            isOn: false, 
-            isDone: false
-        }
-        // this.popSurvey.bind(this.popSurvey);
-        // this.startTimer.bind(this.stopTimer);
+        this.state = { seconds: 0 };
+      }
 
-        this.startTimer();
-    }
+      tick() {
+        this.setState(prevState => ({
+          seconds: prevState.seconds + 1
+        }));
+      }
 
-    startTimer() {
-        this.setState({isOn: true})
-        this.timer = setInterval(() => this.setState({
-            time: Date.now() - this.state.start
-        }), 1);
-        // const range = Math.abs(this.time - this.props.timerLength);
-        // if (range <= 1) {
-        //     this.stopTimer();
-        //     this.popSurvey();
-        // }
-    }
+      componentDidMount() {
+        this.interval = setInterval(() => this.tick(), 1000);
+      }
 
-    stopTimer() {
-        this.setState({isOn: false, isDone: true})
-        clearInterval(this.timer)
-    }
+      componentWillUnmount() {
+        clearInterval(this.interval);
+      }
 
-    popSurvey() {
+      render() {
+          let survey = (this.state.seconds >= this.props.timerLength) ? <h3>My survey!</h3> : null
+
         return (
-            <div>
-                <p>Survey pop!</p>
-            </div>
+          <div>
+            Seconds: {this.state.seconds}
+            {survey}
+          </div>
         );
-    }
-
-    render() {
-
-        let pop = (this.time > 5) ? <h4>Survey was triggered</h4> : null
- 
-        return (
-            <div>
-                <h3>Time elapsed: {ms(this.state.time)}</h3>
-                <h4>TriggerTime: {this.props.timerLength}</h4>
-                {pop}
-            </div>
-        );
-    }
+      }
 }
 
 export default TimerTrigger;
