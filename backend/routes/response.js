@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const Response = require('../models/SurveyResponse');
+
 /*************************************************************************************
     HTTP Requests for individual responses
     Description: data from a single response
@@ -10,7 +12,17 @@ const router = express.Router();
     update a response. Also wont do this, but we can outline the function
 */
 router.put('/response/:responseID', function (req, res) { 
-    res.send('hello world')
+    surveyResponse = Response(req.body);
+    
+    surveyResponse.Save(function(error, results){
+        if (err) {
+            res.send('Error inserting response with title ' + survey.title)
+            return console.error(err);
+          }
+          res.send(result._id + ' Inserted into database')
+          console.log(res.surveyID + " saved to Survey collection.");
+    });
+    res.send('hello world');
 })
 
 /*
