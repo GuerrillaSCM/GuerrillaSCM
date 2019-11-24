@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const ObjectId = require('mongoose').Schema.Types.ObjectId;
+const ObjectId = require('mongoose').Types.ObjectId;
 const Survey = require('../models/Survey');
 const Question = require('../models/Question');
 const Trigger = require('../models/Trigger');
@@ -23,26 +23,26 @@ router.get('/user/:userID', function (req, res) {
 router.post('/user/:userID', function (req, res) {
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
-  body = req.body;
+  body = req.body; //refer to req.body so its more clear in the rest of the function.
 
-  delete body['questions'];
+  delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
   delete body['trigger'];
+
   survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
-  console.log(oldBody);
-
   if (oldBody.questions != null) {
-    console.log("Questions IF");
     oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
-      var q = Question(question);
-      q.save(function (err, result) {
+      survey.questions.push(Question(question));
+      console.log(survey.questions);
+    });
+    survey.questions.forEach(question => {
+      question.save(function (err, result) {
         if (err) {
           return console.error(err);
         }
-        survey.questions.push(result._id);
-        console.log("question saved to Survey collection.");
-      });
+        console.log("saved question with id: " + question._id);
+      })
     });
   }
 
@@ -59,7 +59,7 @@ router.post('/user/:userID', function (req, res) {
       return console.error(err);
     }
     res.send(result._id + ' Inserted into database')
-    console.log(result.title + " saved to Survey collection.");
+    console.log(result + " saved to Survey collection.");
   });
 
 })

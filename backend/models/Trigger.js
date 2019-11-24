@@ -14,4 +14,4 @@ class TriggerSchema extends mongoose.Schema {
 }
 
 // compile schema to model and export.
-module.exports = mongoose.model('Trigger', new TriggerSchema(), 'Trigger');
+module.exports = mongoose.model('Trigger', new TriggerSchema(), 'Trigger');s
