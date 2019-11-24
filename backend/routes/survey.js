@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+const Survey = require('../models/Survey');
+const Question = require('../models/Question');
+const Trigger = require('../models/Trigger');
+
 /*************************************************************************************
     HTTP Requests for userIDs
 **************************************************************************************/
