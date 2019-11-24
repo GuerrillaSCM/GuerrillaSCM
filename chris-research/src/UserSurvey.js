@@ -9,7 +9,7 @@ class UserSurvey extends Component {
   render() {
     return (
       <div className="UserSurvey">
-        <body style={{backgroundColor: "#fffdd0", minHeight: "100vh"}}>
+        <body style={{backgroundColor: "#fffdd0"}}>
 
           <img src={scmLogo} className="UserSurvey-logo" alt="logo" />
 
