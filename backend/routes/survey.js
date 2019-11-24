@@ -14,7 +14,16 @@ const Trigger = require('../models/Trigger');
     Get all surveys for a specific user
 */
 router.get('/user/:userID', function (req, res) {
-  res.send('this is the GET /user/:userID ')
+
+  Survey
+    .find({owner: req.params.userID})
+    .populate('questions') // only works if we pushed refs to survey.questions
+    .populate('trigger')
+    .exec(function (err, survey) {
+      if (err) return res.send(err);
+      res.send(survey);
+    });
+  // res.send('this is the GET /user/:userID ')
 })
 
 /*
