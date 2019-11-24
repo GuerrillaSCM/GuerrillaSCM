@@ -1,3 +1,5 @@
+import WebsiteModal from '../WebsiteModal';
+
 const React = require('react')
 const ms = require('pretty-ms')
 
@@ -22,7 +24,7 @@ class TimerTrigger extends React.Component {
       }
 
       render() {
-          let survey = (this.state.seconds >= this.props.timerLength) ? <h3>My survey!</h3> : null
+          let survey = (this.state.seconds >= this.props.timerLength) ? <WebsiteModal></WebsiteModal> : null
 
         return (
           <div>

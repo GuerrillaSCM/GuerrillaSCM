@@ -10,7 +10,6 @@ function App() {
       <h3>Some random React App</h3>
       <LikeButton></LikeButton>
       <TimerTrigger timerLength={5}/>
-      <WebsiteModal></WebsiteModal>
     </div>
   );
 }
