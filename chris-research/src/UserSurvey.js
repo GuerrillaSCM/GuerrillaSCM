@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import scmLogo from './guerillaSCM.png';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Rating from './StarRating.js';
 import './UserSurvey.css';
 
@@ -54,9 +55,9 @@ class UserSurvey extends Component {
 
           <div> 
             {/* Save Button */}
-            <button style={{marginRight: "5px"}}>Save</button>
+            <Button variant="contained" style={{marginRight: "5px"}}>Save</Button>
             {/* Submit Button */}
-            <button style={{marginLeft: "5px"}}>Submit</button>
+            <Button variant="contained" style={{marginLeft: "5px"}}>Submit</Button>
           </div>
 
         </body>
