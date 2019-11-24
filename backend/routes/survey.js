@@ -48,6 +48,15 @@ router.post('/user/:userID', function (req, res) {
     Adding a new survey
 */
 router.get('/survey/:surveyID', function (req, res) {
+
+  Survey
+    .findById(req.params.surveyID)
+    .populate('eventsAttended') // only works if we pushed refs to person.eventsAttended
+    .exec(function (err, person) {
+      if (err) return handleError(err);
+      console.log(person);
+    });
+
   res.send('this is the GET /survey/:surveyID ')
 })
 

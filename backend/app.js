@@ -32,7 +32,6 @@ mongoose.connect(uri, {
 }).then(result =>{
   app.listen(3000); //Listens for requests (asynchronous!)
   console.log('API running on port: ' + 3000);
-
 }).catch(err => {
   console.log(err);
 });
