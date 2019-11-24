@@ -11,6 +11,7 @@ const responseRoutes = require('./routes/response');
 const surveyRoutes = require('./routes/survey');
 const embeddedRoutes = require('./routes/embed');
 const memeRoutes = require('./routes/meme');
+
 const mongoose = require('mongoose');
 
 const Survey = require('./models/Survey');
@@ -58,9 +59,9 @@ app.get('/meme/:test', function (req, res) {
     creationTime: new Date(),
     questions: [{
       type: "CommentBox",
-      questionID: 0, 
-      prompt: "What do you think about memes?" 
-    }], 
+      questionID: 0,
+      prompt: "What do you think about memes?"
+    }],
     trigger: null
   });
 
