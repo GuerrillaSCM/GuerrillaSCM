@@ -23,6 +23,8 @@ router.post('/user/:userID', function (req, res) {
   survey = Survey(req.body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
+  console.log(req.body);
+
   req.body.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
     survey.questions.push(Question(question));
   });
@@ -51,13 +53,14 @@ router.get('/survey/:surveyID', function (req, res) {
 
   Survey
     .findById(req.params.surveyID)
-    .populate('eventsAttended') // only works if we pushed refs to person.eventsAttended
-    .exec(function (err, person) {
-      if (err) return handleError(err);
-      console.log(person);
+    .populate('questions') // only works if we pushed refs to survey.questions
+    .populate('trigger')
+    .exec(function (err, survey) {
+      if (err) return res.send(err);
+      res.send(person);
     });
 
-  res.send('this is the GET /survey/:surveyID ')
+  // res.send('this is the GET /survey/:surveyID ')
 })
 
 /*
