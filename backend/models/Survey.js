@@ -9,7 +9,7 @@ class SurveySchema extends mongoose.Schema {
     this.add({
       title: String,
       // _id: mongoose.Schema.ObjectId,
-      owner: String,
+      owner: String, //This will get changes to an ObjectID when we hav a user in the model
       published: Boolean, // boolean if the survey is published or not.
       creationTime: Date,
       questions: [{
