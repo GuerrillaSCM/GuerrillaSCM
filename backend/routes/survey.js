@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const ObjectId = require('mongoose').Schema.Types.ObjectId;
 const Survey = require('../models/Survey');
 const Question = require('../models/Question');
 const Trigger = require('../models/Trigger');
@@ -20,27 +21,33 @@ router.get('/user/:userID', function (req, res) {
     add a new survey
 */
 router.post('/user/:userID', function (req, res) {
-  
-  var oldBody = req.body;
-  body = req.body;
 
-  console.log(req.body);
+  var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
+  body = req.body;
 
   delete body['questions'];
   delete body['trigger'];
   survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
+  console.log(oldBody);
 
   if (oldBody.questions != null) {
     console.log("Questions IF");
-    oldReq.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
-      survey.questions.push(Question(question));
+    oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
+      var q = Question(question);
+      q.save(function (err, result) {
+        if (err) {
+          return console.error(err);
+        }
+        survey.questions.push(result._id);
+        console.log("question saved to Survey collection.");
+      });
     });
   }
 
   if (oldBody.trigger != null) {
-    oldReq.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
+    oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
       survey.trigger.push(Trigger(trigger));
     });
   }
@@ -73,7 +80,7 @@ router.get('/survey/:surveyID', function (req, res) {
     .populate('trigger')
     .exec(function (err, survey) {
       if (err) return res.send(err);
-      res.send(person);
+      res.send(survey);
     });
 
   // res.send('this is the GET /survey/:surveyID ')

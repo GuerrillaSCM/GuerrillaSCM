@@ -4,6 +4,7 @@ class QuestionSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
+      // _id: mongoose.Schema.Types.ObjectId,
       questionType: {
         type: String,
         default: 'N/A'
