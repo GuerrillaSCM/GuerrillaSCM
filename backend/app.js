@@ -1,18 +1,22 @@
-/*
-    CptS 489, Spring 2019
-    Project: Task Tracker
-    File: server.js
-*/
+const express = require('express')
+const app = express()
+const path = require('path')
 
-var express = require('express')
-var app = express()
+const responseRoutes = require('./routes/response');
+const surveyRoutes = require('./routes/survey');
+const embeddedRoutes = require('./routes/embed');
+const memeRoutes = require('./routes/meme');
 
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/meme/', function (req, res) {
-    console.log("This bitch aint emtpy, anti-yeet!")
-  res.send('yeetus deletus')
-})
+
+// Routing API end point assignments
+app.use('/api/response/', responseRoutes);
+app.use('/api/survey/', surveyRoutes);
+app.use('/api/embed/', embeddedRoutes);
+app.use('/meme/', memeRoutes);
+
+app.use((req, res, next) => {
+  res.status(404).send('<h1>404: Page Not Found<\h1.');
+});
+
 
 app.listen(3000); //Listens for requests (asynchronous!)
-
-console.log('djfgdksfadskjfahlksdhflkahsdlkjfhalksdhf API running on port: ' + 3000);
