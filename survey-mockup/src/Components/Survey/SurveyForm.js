@@ -44,6 +44,10 @@ const useStyles = makeStyles(theme => ({
         onDelete={deleteid}/>);
   }
 
+
+/*
+    param: props.questions (Question object, should contain all the questions in one object?)
+*/  
 export default function SurveyForm(props) {
 
     const classes = useStyles();

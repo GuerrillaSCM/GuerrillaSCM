@@ -23,7 +23,7 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3, 2),
-    margin: theme.spacing(5)
+    margin: theme.spacing(5),
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -40,6 +40,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+/*
+    param: props.surveyId
+           props.dateCreated
+           props.publishedStatus
+*/
 export default function SurveyActions(props) {
 
   const createNewId = require('uuid/v1');
@@ -68,6 +73,7 @@ export default function SurveyActions(props) {
           className={classes.textField}
           label="Survey Name"
           margin="normal"
+          //Something about this version not having a variant prop??
           variant="outlined"
           fullWidth
         />

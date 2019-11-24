@@ -2,7 +2,6 @@
 //navbar will be static on top
 import React from 'react';
 import NavBar from '../Header/NavBar'
-import SurveyPage from '../Survey/SurveyCreationPage';
 import {createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
@@ -17,7 +16,6 @@ const container = () => {
         <div className="">
             <MuiThemeProvider theme={theme}>
                 <NavBar/>
-                <SurveyPage />
             </MuiThemeProvider>
         </div>
     );
