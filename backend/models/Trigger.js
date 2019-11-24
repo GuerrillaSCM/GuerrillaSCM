@@ -4,7 +4,7 @@ class TriggerSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      type: {
+      triggerType: {
         type: String,
         default: 'N/A'
       }, // the type of trigger

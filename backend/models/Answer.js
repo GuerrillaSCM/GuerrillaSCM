@@ -5,7 +5,7 @@ class AnswerSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      type: {
+      answerType: {
         type: String,
         default: 'N/A'
       }, // the type of the question that this is an answer to.

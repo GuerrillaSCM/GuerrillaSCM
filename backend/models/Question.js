@@ -4,7 +4,7 @@ class QuestionSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      type: {
+      questionType: {
         type: String,
         default: 'N/A'
       }, //the type of question (star rating etc)
