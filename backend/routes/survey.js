@@ -25,9 +25,8 @@ router.post('/user/:userID', function (req, res) {
   body = req.body;
 
   console.log(req.body);
-
-  delete body['questions'];
-  delete body['trigger'];
+  //delete body['questions'];
+  //delete body['trigger'];
   survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
