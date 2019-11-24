@@ -20,12 +20,30 @@ router.get('/user/:userID', function (req, res) {
     add a new survey
 */
 router.post('/user/:userID', function (req, res) {
-  survey = Survey(req.body);
+  
+  var oldBody = req.body;
+  body = req.body;
+
+  console.log(req.body);
+
+  delete body['questions'];
+  delete body['trigger'];
+  survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
-  req.body.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
-    survey.questions.push(Question(question));
-  });
+
+  if (oldBody.questions != null) {
+    console.log("Questions IF");
+    oldReq.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.questions.push(Question(question));
+    });
+  }
+
+  if (oldBody.trigger != null) {
+    oldReq.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.trigger.push(Trigger(trigger));
+    });
+  }
 
   // Save the survey
   survey.save(function (err, result) {
@@ -34,7 +52,7 @@ router.post('/user/:userID', function (req, res) {
       return console.error(err);
     }
     res.send(result._id + ' Inserted into database')
-    console.log(res.title + " saved to Survey collection.");
+    console.log(result.title + " saved to Survey collection.");
   });
 
 })
@@ -48,7 +66,17 @@ router.post('/user/:userID', function (req, res) {
     Adding a new survey
 */
 router.get('/survey/:surveyID', function (req, res) {
-  res.send('this is the GET /survey/:surveyID ')
+
+  Survey
+    .findById(req.params.surveyID)
+    .populate('questions') // only works if we pushed refs to survey.questions
+    .populate('trigger')
+    .exec(function (err, survey) {
+      if (err) return res.send(err);
+      res.send(person);
+    });
+
+  // res.send('this is the GET /survey/:surveyID ')
 })
 
 /*

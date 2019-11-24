@@ -5,8 +5,14 @@ class AnswerSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      type: String, // the type of the question that this is an answer to.
-      questionID: Number, // ID of the question it is responding to
+      answerType: {
+        type: String,
+        default: 'N/A'
+      }, // the type of the question that this is an answer to.
+      questionID: {
+        type: Number,
+        default: 0
+      }, // ID of the question it is responding to
     });
   }
 }
