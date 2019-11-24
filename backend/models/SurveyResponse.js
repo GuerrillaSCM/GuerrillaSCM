@@ -6,11 +6,16 @@ class SurveyResponseSchema extends mongoose.Schema {
     super(obj, options);
     this.add({
       // _id: Schema.ObjectId, //unique ID for the specific survey response
-      surveyID: mongoose.Schema.ObjectId, //Unique ID for the parent survey that this is a response to
+      surveyID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Survey',
+        default: null
+      }, //Unique ID for the parent survey that this is a response to
       creationTime: Date,
       answers: [{ // array of references to answers in the answeres collection.
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Answer'
+        ref: 'Answer',
+        default: []
       }]
     });
   }

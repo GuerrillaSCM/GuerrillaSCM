@@ -5,7 +5,10 @@ class TimerTriggerSchema extends Trigger {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      timer: Number //integer > 0 for timer in ms
+      timer: {
+        type: Number,
+        default: 10000
+      } //integer > 0 for timer in ms
     });
   }
 }

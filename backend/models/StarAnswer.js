@@ -5,7 +5,10 @@ class StarAnswerSchema extends Answer {
   constructor(obj, options) {
     super(obj, options);
     this.add({
-      stars: Number //integer from 1-5 for the number of stars
+      stars: {
+        type: Number,
+        default: null
+      } //integer from 1-5 for the number of stars
     });
   }
 }
