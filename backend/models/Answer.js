@@ -5,6 +5,7 @@ class AnswerSchema extends mongoose.Schema {
   constructor(obj, options) {
     super(obj, options);
     this.add({
+      // _id: mongoose.Schema.Types.ObjectId,
       answerType: {
         type: String,
         default: 'N/A'
