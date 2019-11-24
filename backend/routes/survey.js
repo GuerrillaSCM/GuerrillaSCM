@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+const Survey = require('../models/Survey');
+const Question = require('../models/Question');
+const Trigger = require('../models/Trigger');
+
 /*************************************************************************************
     HTTP Requests for userIDs
 **************************************************************************************/
@@ -16,7 +20,22 @@ router.get('/user/:userID', function (req, res) {
     add a new survey
 */
 router.post('/user/:userID', function (req, res) { 
-    res.send('this is the GET /user/:userID ')
+    survey = Survey(req.body);
+    survey.owner = req.params.userID;
+
+    survey.questions.forEach(element => {
+        survey.questions
+      });
+
+    survey.save(function (err, result) {
+        if (err) {
+            res.send('Error inserting survey with title ' + survey.title)
+            return console.error(err);
+        }
+        res.send(result._id + ' Inserted into database')
+        console.log(res.title + " saved to Survey collection.");
+      });
+    
 })
 
 
