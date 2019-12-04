@@ -9,7 +9,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-
+const bodyParser = require('body-parser');
 const responseRoutes = require('./routes/response');
 const surveyRoutes = require('./routes/survey');
 const embeddedRoutes = require('./routes/embed');
@@ -38,7 +38,6 @@ mongoose.connect(uri, {
 }).then(result => {
   app.listen(3000); //Listens for requests (asynchronous!)
   console.log('API running on port: ' + 3000);
-
 }).catch(err => {
-  console.log(err);
+  console.log(JSON.stringify(err));
 });
