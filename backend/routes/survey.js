@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const ObjectId = require('mongoose').Schema.Types.ObjectId;
+const ObjectId = require('mongoose').Types.ObjectId;
 const Survey = require('../models/Survey');
 const Question = require('../models/Question');
 const Trigger = require('../models/Trigger');
@@ -14,8 +14,19 @@ const Trigger = require('../models/Trigger');
     Get all surveys for a specific user
 */
 router.get('/user/:userID', function (req, res) {
-  res.send('this is the GET /user/:userID ')
-})
+
+  Survey
+    .find({
+      owner: req.params.userID
+    })
+    .populate('questions') // only works if we pushed refs to survey.questions
+    .populate('trigger')
+    .exec(function (err, survey) {
+      if (err) return res.send(err);
+      res.send(survey);
+    });
+  // res.send('this is the GET /user/:userID ')
+});
 
 /*
     add a new survey
@@ -23,26 +34,26 @@ router.get('/user/:userID', function (req, res) {
 router.post('/user/:userID', function (req, res) {
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
-  body = req.body;
+  body = req.body; //refer to req.body so its more clear in the rest of the function.
 
-  delete body['questions'];
+  delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
   delete body['trigger'];
+
   survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
-  console.log(oldBody);
-
   if (oldBody.questions != null) {
-    console.log("Questions IF");
     oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
-      var q = Question(question);
-      q.save(function (err, result) {
+      survey.questions.push(Question(question));
+      console.log(survey.questions);
+    });
+    survey.questions.forEach(question => {
+      question.save(function (err, result) {
         if (err) {
           return console.error(err);
         }
-        survey.questions.push(result._id);
-        console.log("question saved to Survey collection.");
-      });
+        console.log("saved question with id: " + question._id);
+      })
     });
   }
 
@@ -59,10 +70,10 @@ router.post('/user/:userID', function (req, res) {
       return console.error(err);
     }
     res.send(result._id + ' Inserted into database')
-    console.log(result.title + " saved to Survey collection.");
+    console.log(result + " saved to Survey collection.");
   });
 
-})
+});
 
 
 /*************************************************************************************
@@ -84,17 +95,42 @@ router.get('/survey/:surveyID', function (req, res) {
     });
 
   // res.send('this is the GET /survey/:surveyID ')
-})
+});
 
 /*
     Update survey
 */
 router.put('/survey/:surveyID', function (req, res) {
   res.send('this is the survey/:surveyID');
-})
+});
 
 router.delete('/survey/:surveyID', function (req, res) {
-  res.send('/survey/:surveyID')
-})
+
+  Survey
+    .findById(req.params.surveyID)
+    .populate('questions') // only works if we pushed refs to survey.questions
+    .populate('trigger')
+    .exec(function (err, survey) {
+      if (err) return res.send(err); //throw error
+
+      if (survey == null) return res.send("Survey already deleted");
+      
+      if (survey.questions != null) { //remove all questions
+        survey.questions.forEach(question => {
+          Question.findByIdAndRemove(question._id)
+        });
+      }
+
+      if (survey.trigger != null) { //remove all triggers
+        survey.trigger.forEach(trigger => {
+          Trigger.findByIdAndRemove(trigger._id)
+        });
+      }
+
+      Survey.findByIdAndRemove(req.params.surveyID, function (err, result) {
+        res.send('Survey removed');
+      }); //remove survey
+    });
+});
 
 module.exports = router;
