@@ -52,7 +52,7 @@ router.post('/user/:userID', function (req, res) {
         if (err) {
           return console.error(err);
         }
-        console.log("saved question with id: " + question._id);
+        // console.log("saved question with id: " + question._id);
       })
     });
   }
@@ -101,7 +101,57 @@ router.get('/survey/:surveyID', function (req, res) {
     Update survey
 */
 router.put('/survey/:surveyID', function (req, res) {
-  res.send('this is the survey/:surveyID');
+
+  var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
+  body = req.body; //refer to req.body so its more clear in the rest of the function.
+
+  delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
+  delete body['trigger'];
+
+  survey = new Survey(body);
+  survey.owner = req.params.userID; //setting the ownerID from the URL parameter
+
+  if (oldBody.questions != null) {
+
+    oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.questions.push(Question(question));
+      console.log(survey.questions);
+    });
+
+    // update questions that exist, or add new ones.
+    survey.questions.forEach(question => {
+      q = Question(question);
+
+      Question.findOneAndUpdate({
+        _id: q._id
+      }, q, {
+        new: true,
+        upsert: true // Make this update into an upsert
+      }, function (err, result) {
+        if (err) {
+          return console.error(err);
+        }
+        console.log("saved question with id: " + question._id);
+      });
+    });
+  }
+
+  if (oldBody.trigger != null) {
+    oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.trigger.push(Trigger(trigger));
+    });
+  }
+
+  // Save the survey
+  survey.save(function (err, result) {
+    if (err) {
+      res.send('Error inserting survey with title ' + survey.title)
+      return console.error(err);
+    }
+    res.send(result._id + ' Inserted into database')
+    console.log(result + " saved to Survey collection.");
+  });
+
 });
 
 router.delete('/survey/:surveyID', function (req, res) {
@@ -117,18 +167,16 @@ router.delete('/survey/:surveyID', function (req, res) {
 
       if (survey.questions != null) { //remove all questions
         survey.questions.forEach(question => {
-
           Question.findByIdAndRemove(question._id, function (err, result) {
-            console.log("delete questions", result);
+            // console.log("delete questions", result);
           });
         });
       }
 
       if (survey.trigger != null) { //remove all triggers
         survey.trigger.forEach(trigger => {
-          
           Trigger.findByIdAndRemove(trigger._id, function (err, result) {
-            console.log("delete triggers", result);
+            // console.log("delete triggers", result);
           });
         });
       }
