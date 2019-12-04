@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   res.status(404).send('<h1>404: Page Not Found<\h1.');
 });
 
-const uri = "mongodb+srv://testing:oeXeGlFbH8U1uEjA@guerrillascm-rk5d5.mongodb.net/GuerrillaSCM?retryWrites=true&w=majority";
+const uri = "mongodb+srv://testing:MtfzES1ZWSOZnl13@guerrillascm-rk5d5.mongodb.net/GuerrillaSCM?retryWrites=true&w=majority";
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useFindAndModify: false
