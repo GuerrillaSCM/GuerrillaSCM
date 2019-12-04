@@ -114,16 +114,22 @@ router.delete('/survey/:surveyID', function (req, res) {
       if (err) return res.send(err); //throw error
 
       if (survey == null) return res.send("Survey already deleted");
-      
+
       if (survey.questions != null) { //remove all questions
         survey.questions.forEach(question => {
-          Question.findByIdAndRemove(question._id)
+
+          Question.findByIdAndRemove(question._id, function (err, result) {
+            console.log("delete questions", result);
+          });
         });
       }
 
       if (survey.trigger != null) { //remove all triggers
         survey.trigger.forEach(trigger => {
-          Trigger.findByIdAndRemove(trigger._id)
+          
+          Trigger.findByIdAndRemove(trigger._id, function (err, result) {
+            console.log("delete triggers", result);
+          });
         });
       }
 
