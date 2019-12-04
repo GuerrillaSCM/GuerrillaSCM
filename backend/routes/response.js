@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 const Response = require('../models/SurveyResponse');
+const Answer = require('../models/Answer')
 
 /*************************************************************************************
     HTTP Requests for individual responses
@@ -11,18 +13,32 @@ const Response = require('../models/SurveyResponse');
 /*
     update a response. Also wont do this, but we can outline the function
 */
-router.put('/response/:responseID', function (req, res) { 
-    surveyResponse = Response(req.body);
+router.post('/response/:responseID', function (req, res) { 
+    body = req.body;
+    surveyResponse = Response(body);
+
+    var sID = mongoose.Types.ObjectId(req.body.surveyID);
+    surveyResponse.surveyID = sID;
+    var answers = JSON.parse(JSON.stringify(surveyResponse.answers));
+
+    if (answers != null) {
+        answers.forEach(answer => { // we need to push each question into the array so that it will get saved properly by mongoose
+            var a = Answer(answer);
+            a.save(function (err, result) {
+              if (err) {
+                return console.error(err);
+              }
+              console.log("answer saved to Survey collection.");
+            });
+        });
+    }
     
-    surveyResponse.Save(function(error, results){
-        if (err) {
-            res.send('Error inserting response with title ' + survey.title)
+    surveyResponse.save(function(err, results){
+        if (err)  {
             return console.error(err);
           }
-          res.send(result._id + ' Inserted into database')
-          console.log(res.surveyID + " saved to Survey collection.");
+          console.log("saved to surveyResponse.");
     });
-    res.send('hello world');
 })
 
 /*
