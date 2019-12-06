@@ -4,77 +4,52 @@
     survey items. 
 */
 
-/* 
-    TODO: Finish Survey Actions and QuestionDialog first
-          Do survey form
-*/
-import React, { useState} from 'react';
+import React from 'react';
 import SurveyActions from './SurveyActions';
 import SurveyForm from './SurveyForm';
+import {SurveyContextProvider} from '../Context/SurveyContextClass';
 
 /*
     This class is where we do the requests if we are editing a survey.
     Could potentiall pass in a survey id then do request on that. 
 */
 export default function SurveyPage (){
-
-    //USE CLASS COMPONENT!!! or use useEffect....
-    const [questions, setQuestions] = useState([]);
-
     
+    /*
+        TODO: We should pass a prop here
+        
+        
+        constMockObject() {
+            if(fetch is null) {
+                //set null object
+            }
+            else {
+                //set the object from the fetch
+            }
+        }
+    */
 
     const createNewId = require('uuid/v1');
 
-    //this is kinda wrong, we need to create it inside this object not the object itself
-    const [surveyProps, setSurveyProps] = useState([createNewId()])
-    
-    const addQuestionHandler = question => {
-        setQuestions(prevQuestions => [...prevQuestions, {id: createNewId(), 
-            ...question}]);
+    const mockSurveyObject = {
+        surveyId : createNewId(),
+        surveyTitle: "",
+        creationDate: "12/5/2019",
+        isPublished: "No",
+        //probably need a mock of this object so we have a blueprint or not? 
+        questions : [],
+        trigger : {
+            triggerType: "",
+            triggerOption: "",
+        }
     }
 
-    const removeQuestionHandler = questionId => {
-        setQuestions(prevQuestions => 
-            prevQuestions.filter(question => question.id !== questionId));
-    }
-
-    //set the settable items here
-    /*state = {
-        //an array might not be needed
-        surveyProps : [
-            {
-                surveyTitle: '',
-                surveyDescription: ''
-            }
-        ],
-        //mocking question types
-        questionTypes : [
-            {type: 'star-rating'},
-            {type: 'multiple-choice'},
-            {type: 'comments-box'}
-        ],
-        questions: []
-    }*/
-
-    
-
-    /*
-        When editing set state here
-    */
-    // componentWillMount() {
-
-    // }
-
-    
         return(
             <div className="">
-                <SurveyActions
-                onAddQuestion={addQuestionHandler} surveyId={surveyProps}/>
-                <SurveyForm
-                questions={questions} onDeleteQuestion={removeQuestionHandler}/>
+                <SurveyContextProvider surveyObjectParent={mockSurveyObject}>
+                    <SurveyActions/>
+                    <SurveyForm/>
+                </SurveyContextProvider>
             </div>
         );
-    
 }
-
-//export default SurveyPage;
