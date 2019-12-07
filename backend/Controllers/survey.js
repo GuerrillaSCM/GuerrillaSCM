@@ -109,7 +109,3 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
       }); //remove survey
     });
 }
-
-exports.putSurveyGivenSurveyID = (req, res, next) => {
-    res.send('this is the survey/:surveyID');
-}
