@@ -6,7 +6,7 @@ In the project directory, you can run:
 
 Link to demo the site
 
-### `https://master.difpi4ugfcfks.amplifyapp.com/`
+[https://master.difpi4ugfcfks.amplifyapp.com/]
 
 ### `npm start`
 
