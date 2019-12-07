@@ -103,25 +103,28 @@ router.get('/survey/:surveyID', function (req, res) {
 router.put('/survey/:surveyID', function (req, res) {
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
-  body = req.body; //refer to req.body so its more clear in the rest of the function.
+  var body = req.body; //refer to req.body so its more clear in the rest of the function.
 
   delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
   delete body['trigger'];
 
-  survey = new Survey(body);
+  var survey = new Survey(body);
   survey._id = req.params.surveyID; //set the id to the one passed in the URL
 
-  Survey.findById(survey._id, function (error, returnedSurvey) {
+  // Find the original survey definition and populate its questions.
+  Survey.findById(survey._id).populate('questions').populate('triggers').exec(function (error, returnedSurvey) {
     if (error) return res.send(error); //send error
 
-    returnedSurvey = new Survey(returnedSurvey); //cast to a survey
-    mapQuestionIDsToObjectIDs = new Map(); // create a hashmap for matching question IDs of the old survey to object IDs for update.
-
-    console.log("Survey found!!!!!lkgdhgkljdlgkjhdflkjgsjd");
+    var returnedSurvey = new Survey(returnedSurvey); //cast to a survey
+    var mapQuestionIDsToObjectIDs = new Map(); // create a hashmap for matching question IDs of the old survey to object IDs for update.
+    mapQuestionIDsToObjectIDs.set(survey.TEST, function () { //make sure to return a new ObjectId when an undefined value is asked for. (survey.TEST is not real, so it will be undefined)
+      return new ObjectId()
+    });
 
     for (var i = 0; i < returnedSurvey.questions.length; i++) { //need to match each question ID from the old survey to the new one to get their objectID
-        survey.questions[i]._id = returnedSurvey.questions[i]._id; // update the ID of each question
+      mapQuestionIDsToObjectIDs.set(returnedSurvey.questions[i].questionID, returnedSurvey.questions[i]._id); // update the ID of each question
     }
+    console.log(mapQuestionIDsToObjectIDs.size);
 
     // TODO:
     // Cases: same number of questions, some updates
@@ -129,16 +132,17 @@ router.put('/survey/:surveyID', function (req, res) {
     // more questions, some updates (need to add new questions)
     // all cases: need to update if they were updated, or make new if they are not in the list.
 
-    if (oldBody.questions != null) {
-
-      oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
+    // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
+    if (oldBody.questions != null) { // Only update questions if there are questions. 
+      oldBody.questions.map(function (question) { // we need to push each question into the array so that it will get saved properly by mongoose
+        question._id = mapQuestionIDsToObjectIDs.get(question.questionID); //set the ID to either the same one as the existing questionID, or create a new one.
         survey.questions.push(Question(question));
       });
-  
+
       // update questions that exist, or add new ones.
       survey.questions.forEach(question => {
         q = Question(question);
-  
+
         Question.findOneAndUpdate({
           _id: ObjectId(q._id)
         }, q, {
@@ -148,17 +152,17 @@ router.put('/survey/:surveyID', function (req, res) {
           if (err) {
             return console.error(err);
           }
-          console.log(result);
+          // console.log(result);
         });
       });
     }
-  
+
     if (oldBody.trigger != null) {
       oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
         survey.trigger.push(Trigger(trigger));
       });
     }
-  
+
     // Save the survey
     survey.save(function (err, result) {
       if (err) {
