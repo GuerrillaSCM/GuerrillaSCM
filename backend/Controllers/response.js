@@ -5,6 +5,7 @@
 
 const mongoose = require('mongoose');
 const Response = require('../models/SurveyResponse');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 
 exports.getResponseFromResponseID = (req, res, next) => {
@@ -18,11 +19,11 @@ exports.getResponseFromResponseID = (req, res, next) => {
         if (err) return res.send(err);
         res.send(reponse);
       });
-  }
+}
 
 exports.postResponseGivenSurveyID = (req, res, next) => {
     surveyResponse = Response(req.body);
-    surveyResponse.surveyID = mongoose.Types.ObjectId(req.params.surveyID);
+    surveyResponse.surveyID = ObjectId(req.params.surveyID);
 
     var answers = JSON.parse(JSON.stringify(surveyResponse.answers));
 
@@ -49,7 +50,7 @@ exports.postResponseGivenSurveyID = (req, res, next) => {
 
 exports.postResponseGivenResponseID = (req, res, next) => {
     surveyResponse = Response(req.body);
-    surveyResponse.surveyID = mongoose.Types.ObjectId(surveyResponse.surveyID);
+    surveyResponse.surveyID = ObjectId(surveyResponse.surveyID);
 
     var answers = JSON.parse(JSON.stringify(surveyResponse.answers));
 
