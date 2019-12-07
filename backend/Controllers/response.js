@@ -5,6 +5,7 @@
 const mongoose = require('mongoose');
 const Response = require('../models/SurveyResponse');
 const ObjectId = require('mongoose').Types.ObjectId;
+const Answer = require('../models/Answer');
 
 /*
   Response ID controllers
@@ -24,21 +25,28 @@ exports.getResponseFromResponseID = (req, res, next) => {
 }
 
 exports.postResponseGivenSurveyID = (req, res, next) => {
-    surveyResponse = Response(req.body);
+
+    var oldBody = JSON.parse(JSON.stringify(req.body)); 
+    body = req.body; //refer to req.body so its more clear in the rest of the function.
+
+    delete body['answers'];
+
+    surveyResponse = Response(body);
     surveyResponse.surveyID = ObjectId(req.params.surveyID);
 
-    var answers = JSON.parse(JSON.stringify(surveyResponse.answers));
-
-    if (answers != null) {
-        answers.forEach(answer => { // we need to push each question into the array so that it will get saved properly by mongoose
-            var a = Answer(answer);
-            a.save(function (err, result) {
-              if (err) {
-                return console.error(err);
-              }
-              console.log("answer saved to Survey collection.");
-            });
-        });
+    if (oldBody.answers != null) {
+      oldBody.answers.forEach(answer => { 
+        surveyResponse.answers.push(Answer(answer));
+        console.log(surveyResponse.answer);
+      });
+      surveyResponse.answers.forEach(answer => {
+        answer.save(function (err, result) {
+          if (err) {
+            return console.error(err);
+          }
+          console.log("saved question with id: " + answer._id);
+        })
+      });
     }
     
     surveyResponse.save(function (err, result) {
