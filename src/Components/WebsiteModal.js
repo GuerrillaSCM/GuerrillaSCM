@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TransitionsModal() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleOpen = () => {
     setOpen(true);
@@ -34,10 +34,6 @@ export default function TransitionsModal() {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleOpen}
-        style={{marginTop: "10px", marginBottom: "10px"}}>
-        Pop Survey
-      </Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
