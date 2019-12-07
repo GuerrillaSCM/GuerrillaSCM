@@ -1,3 +1,7 @@
+/*
+    This file handles the routing to relevant controller functions
+*/
+
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -35,7 +39,7 @@ router.delete('/response/:responseID', responseController.deleteResponseGivenRep
 router.get('/survey/:surveyID', responseController.getResponseFromResponseID)
 
 /*
-    Used when posting a new response to a specific survey
+    Should post a new response to a specific survey
 */
 router.post('/survey/:surveyID', responseController.postResponseGivenSurveyID) 
 

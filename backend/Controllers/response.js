@@ -2,11 +2,13 @@
     This file handles access to the database for the responses
 */
 
-
 const mongoose = require('mongoose');
 const Response = require('../models/SurveyResponse');
 const ObjectId = require('mongoose').Types.ObjectId;
 
+/*
+  Response ID controllers
+*/
 
 exports.getResponseFromResponseID = (req, res, next) => {
     Response
@@ -48,6 +50,9 @@ exports.postResponseGivenSurveyID = (req, res, next) => {
       });
 }
 
+/*
+  Response ID controllers
+*/
 exports.postResponseGivenResponseID = (req, res, next) => {
     surveyResponse = Response(req.body);
     surveyResponse.surveyID = ObjectId(surveyResponse.surveyID);
