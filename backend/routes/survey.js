@@ -1,36 +1,25 @@
+/*
+    This file handles all of the specific routing for each api endpoint. 
+*/
+
 const express = require('express');
 const router = express.Router();
 
-const ObjectId = require('mongoose').Types.ObjectId;
-const Survey = require('../models/Survey');
-const Question = require('../models/Question');
-const Trigger = require('../models/Trigger');
+const surveyController = require('../Controllers/survey');
 
 /*************************************************************************************
-    HTTP Requests for userIDs
+    HTTP Requests with  userIDs
 **************************************************************************************/
 
 /*
     Get all surveys for a specific user
 */
-router.get('/user/:userID', function (req, res) {
-
-  Survey
-    .find({
-      owner: req.params.userID
-    })
-    .populate('questions') // only works if we pushed refs to survey.questions
-    .populate('trigger')
-    .exec(function (err, survey) {
-      if (err) return res.send(err);
-      res.send(survey);
-    });
-  // res.send('this is the GET /user/:userID ')
-});
+router.get('/user/:userID', surveyController.getAllSurveysGivenUserID);
 
 /*
     add a new survey
 */
+<<<<<<< HEAD
 router.post('/user/:userID', function (req, res) {
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
@@ -74,32 +63,24 @@ router.post('/user/:userID', function (req, res) {
   });
 
 });
+=======
+router.post('/user/:userID', surveyController.postSurveyGivenUserID);
+>>>>>>> dal-implementation
 
 
 /*************************************************************************************
-    HTTP Requests for surveys
+    HTTP Requests with SurveyID
 **************************************************************************************/
 
 /*
     Adding a new survey
 */
-router.get('/survey/:surveyID', function (req, res) {
-
-  Survey
-    .findById(req.params.surveyID)
-    .populate('questions') // only works if we pushed refs to survey.questions
-    .populate('trigger')
-    .exec(function (err, survey) {
-      if (err) return res.send(err);
-      res.send(survey);
-    });
-
-  // res.send('this is the GET /survey/:surveyID ')
-});
+router.get('/survey/:surveyID', surveyController.getSurveyGivenSurveyID);
 
 /*
     Update survey
 */
+<<<<<<< HEAD
 router.put('/survey/:surveyID', function (req, res) {
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
@@ -207,5 +188,13 @@ router.delete('/survey/:surveyID', function (req, res) {
       }); //remove survey
     });
 });
+=======
+router.put('/survey/:surveyID', surveyController.putSurveyGivenSurveyID);
+
+/*
+    Update Survey
+*/
+router.delete('/survey/:surveyID', surveyController.deleteSurveyGivenSurveyID);
+>>>>>>> dal-implementation
 
 module.exports = router;
