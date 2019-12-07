@@ -1,4 +1,3 @@
-
 /*
     This file handles access to the database for the survey
 */
@@ -13,7 +12,7 @@ const Trigger = require('../models/Trigger');
 
 
 exports.getAllSurveysGivenUserID = (req, res, next) => {
-    Survey
+  Survey
     .find({
       owner: req.params.userID
     })
@@ -27,50 +26,50 @@ exports.getAllSurveysGivenUserID = (req, res, next) => {
 }
 
 exports.postSurveyGivenUserID = (req, res, next) => {
-    var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
-    body = req.body; //refer to req.body so its more clear in the rest of the function.
-  
-    delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
-    delete body['trigger'];
-  
-    survey = new Survey(body);
-    survey.owner = req.params.userID; //setting the ownerID from the URL parameter
-  
-    if (oldBody.questions != null) {
-      oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
-        survey.questions.push(Question(question));
-        console.log(survey.questions);
-      });
-      survey.questions.forEach(question => {
-        question.save(function (err, result) {
-          if (err) {
-            return console.error(err);
-          }
-          console.log("saved question with id: " + question._id);
-        })
-      });
-    }
-  
-    if (oldBody.trigger != null) {
-      oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
-        survey.trigger.push(Trigger(trigger));
-      });
-    }
-  
-    // Save the survey
-    survey.save(function (err, result) {
-      if (err) {
-        res.send('Error inserting survey with title ' + survey.title)
-        return console.error(err);
-      }
-      res.send(result._id + ' Inserted into database')
-      console.log(result + " saved to Survey collection.");
+  var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
+  body = req.body; //refer to req.body so its more clear in the rest of the function.
+
+  delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
+  delete body['trigger'];
+
+  survey = new Survey(body);
+  survey.owner = req.params.userID; //setting the ownerID from the URL parameter
+
+  if (oldBody.questions != null) {
+    oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.questions.push(Question(question));
+      console.log(survey.questions);
     });
-  
+    survey.questions.forEach(question => {
+      question.save(function (err, result) {
+        if (err) {
+          return console.error(err);
+        }
+        console.log("saved question with id: " + question._id);
+      })
+    });
+  }
+
+  if (oldBody.trigger != null) {
+    oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.trigger.push(Trigger(trigger));
+    });
+  }
+
+  // Save the survey
+  survey.save(function (err, result) {
+    if (err) {
+      res.send('Error inserting survey with title ' + survey.title)
+      return console.error(err);
+    }
+    res.send(result._id + ' Inserted into database')
+    console.log(result + " saved to Survey collection.");
+  });
+
 }
 
 exports.getSurveyGivenSurveyID = (req, res, next) => {
-    Survey
+  Survey
     .findById(req.params.surveyID)
     .populate('questions') // only works if we pushed refs to survey.questions
     .populate('trigger')
@@ -83,7 +82,7 @@ exports.getSurveyGivenSurveyID = (req, res, next) => {
 }
 
 exports.deleteSurveyGivenSurveyID = (req, res, next) => {
-    Survey
+  Survey
     .findById(req.params.surveyID)
     .populate('questions') // only works if we pushed refs to survey.questions
     .populate('trigger')
@@ -91,7 +90,7 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
       if (err) return res.send(err); //throw error
 
       if (survey == null) return res.send("Survey already deleted");
-      
+
       if (survey.questions != null) { //remove all questions
         survey.questions.forEach(question => {
           Question.findByIdAndRemove(question._id)
@@ -110,7 +109,62 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
     });
 }
 
+// function for the MVP which only deals with the possibility of 1 question and 1 trigger
 exports.putSurveyGivenSurveyID = (req, res, next) => {
+  if (!req.params.surveyID) return res.send("No Surey ID specified");
+
+  Survey.findById(survey._id).populate('questions').populate('triggers').exec(function (error, returnedSurvey) {
+    if (error) return res.send(error); //send error
+
+    var returnedSurvey = new Survey(returnedSurvey); //cast to a survey
+    var newSurvey = new Survey(req.body); //make a survey from the data that we 
+
+    // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
+    if (newSurvey.questions != null) { // Only update questions if there are questions. 
+      q = Question(newSurvey.questions[0]); //make the question from the body into our schema Question
+
+      if (returnedSurvey.questions.length > 0)
+        q._id = returnedSurvey.questions[0]._id; //set the objectID of the new survey to the same as the one from the old survey so it will get updated.
+
+      Question.findOneAndUpdate({ //update the question in the database.
+        _id: ObjectId(q._id) //search based on object ID, for updating multiple questions, we will need to do some work to make sure the new and old question ID's objectId's matchup first.
+      }, q, {
+        new: true,
+        upsert: true // Make this update into an upsert (update or insert)
+      }, function (err, result) {
+        if (err) return console.error(err);
+      });
+    }
+
+    if (newSurvey.triggers != null) {
+      t = Trigger(newSurvey.triggers[0]); //make the trigger from the body into our schema Question
+
+      if (returnedSurvey.triggers.length > 0)
+        t._id = returnedSurvey.triggers[0]._id; //set the objectID of the new survey to the same as the one from the old survey so it will get updated.
+
+      Trigger.findOneAndUpdate({ //update the trigger in the database.
+        _id: ObjectId(t._id) //search based on trigger ID;
+      }, t, {
+        new: true,
+        upsert: true // Make this update into an upsert (update or insert)
+      }, function (err, result) {
+        if (err) return console.error(err);
+      });
+    }
+  });
+
+  // Save the survey
+  survey.save(function (err, result) {
+    if (err) {
+      res.send('Error updating survey with title ' + survey.title)
+      return console.error(err);
+    }
+    res.send(result._id + ' Inserted into database')
+    console.log("Survey updated");
+  });
+}
+
+exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
   var body = req.body; //refer to req.body so its more clear in the rest of the function.
