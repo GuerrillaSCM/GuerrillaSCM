@@ -3,17 +3,17 @@
     File: app.js
 */
 
-const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const path = require('path');
+const mongoose = require('mongoose');
 
+const bodyParser = require('body-parser');
 const responseRoutes = require('./routes/response');
 const surveyRoutes = require('./routes/survey');
 const embeddedRoutes = require('./routes/embed');
 const memeRoutes = require('./routes/meme');
 
-const mongoose = require('mongoose');
 
 // use the bodyparser so we can see what is inside of the body of HTTP requests we recieve
 app.use(bodyParser.urlencoded({
@@ -39,5 +39,5 @@ mongoose.connect(uri, {
   app.listen(3000); //Listens for requests (asynchronous!)
   console.log('API running on port: ' + 3000);
 }).catch(err => {
-  console.log(err);
+  console.log(JSON.stringify(err));
 });
