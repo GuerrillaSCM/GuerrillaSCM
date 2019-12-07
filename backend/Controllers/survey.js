@@ -113,18 +113,34 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
 exports.putSurveyGivenSurveyID = (req, res, next) => {
   if (!req.params.surveyID) return res.send("No Surey ID specified");
 
-  Survey.findById(survey._id).populate('questions').populate('triggers').exec(function (error, returnedSurvey) {
+  var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
+  var body = req.body; //refer to req.body so its more clear in the rest of the function.
+
+  delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
+  delete body['trigger'];
+
+  var newSurvey = new Survey(body); //make a survey from the data that we 
+  newSurvey._id = req.params.surveyID;
+
+  Survey.findById(newSurvey._id).populate('questions').populate('triggers').exec(function (error, returnedSurvey) {
     if (error) return res.send(error); //send error
 
+    console.log(returnedSurvey);
+
+    if (!returnedSurvey) return res.send("Survey to update is not in the database");
+
     var returnedSurvey = new Survey(returnedSurvey); //cast to a survey
-    var newSurvey = new Survey(req.body); //make a survey from the data that we 
+    newSurvey.owner = returnedSurvey.owner; //Make sure the survey keeps the same owner
 
     // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
-    if (newSurvey.questions != null) { // Only update questions if there are questions. 
-      q = Question(newSurvey.questions[0]); //make the question from the body into our schema Question
+    if (oldBody.questions != null) { // Only update questions if there are questions. 
+      console.log("dsklflkadslfkjadslkjflaksdhflkahslkfdhlkjasdhlkjfhaskdhflkasdhlfhasdkljfhalksdjhflkasjhdlfkjahsdlkfhlkh");
+      q = Question(oldBody.questions[0]); //make the question from the body into our schema Question
 
       if (returnedSurvey.questions.length > 0)
         q._id = returnedSurvey.questions[0]._id; //set the objectID of the new survey to the same as the one from the old survey so it will get updated.
+
+      newSurvey.questions.push(q); //add the surveyID to the newSurvey array (adds a new one if there is no id)
 
       Question.findOneAndUpdate({ //update the question in the database.
         _id: ObjectId(q._id) //search based on object ID, for updating multiple questions, we will need to do some work to make sure the new and old question ID's objectId's matchup first.
@@ -136,11 +152,13 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
       });
     }
 
-    if (newSurvey.triggers != null) {
-      t = Trigger(newSurvey.triggers[0]); //make the trigger from the body into our schema Question
+    if (oldBody.triggers != null) {
+      t = Trigger(oldBody.triggers[0]); //make the trigger from the body into our schema Question
 
       if (returnedSurvey.triggers.length > 0)
         t._id = returnedSurvey.triggers[0]._id; //set the objectID of the new survey to the same as the one from the old survey so it will get updated.
+
+      newSurvey.triggers.push(t); //puts the reference to the trigger in the survey
 
       Trigger.findOneAndUpdate({ //update the trigger in the database.
         _id: ObjectId(t._id) //search based on trigger ID;
@@ -151,16 +169,18 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
         if (err) return console.error(err);
       });
     }
-  });
 
-  // Save the survey
-  survey.save(function (err, result) {
-    if (err) {
-      res.send('Error updating survey with title ' + survey.title)
-      return console.error(err);
-    }
-    res.send(result._id + ' Inserted into database')
-    console.log("Survey updated");
+    // Save the survey
+    Survey.findOneAndUpdate({ //update the question in the database.
+      _id: ObjectId(newSurvey._id) //search based on object ID, for updating multiple questions, we will need to do some work to make sure the new and old question ID's objectId's matchup first.
+    }, newSurvey, function (err, result) {
+      if (err) {
+        res.send('Error updating survey with title ' + newSurvey.title)
+        return console.error(err);
+      }
+      res.send(result._id + ' Inserted into database')
+      console.log("Survey updated");
+    });
   });
 }
 
