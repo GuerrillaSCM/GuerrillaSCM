@@ -115,9 +115,12 @@ router.put('/survey/:surveyID', function (req, res) {
     if (error) return res.send(error); //send error
 
     returnedSurvey = new Survey(returnedSurvey); //cast to a survey
+    mapQuestionIDsToObjectIDs = new Map(); // create a hashmap for matching question IDs of the old survey to object IDs for update.
+
+    console.log("Survey found!!!!!lkgdhgkljdlgkjhdflkjgsjd");
 
     for (var i = 0; i < returnedSurvey.questions.length; i++) { //need to match each question ID from the old survey to the new one to get their objectID
-
+        survey.questions[i]._id = returnedSurvey.questions[i]._id; // update the ID of each question
     }
 
     // TODO:
@@ -159,7 +162,7 @@ router.put('/survey/:surveyID', function (req, res) {
     // Save the survey
     survey.save(function (err, result) {
       if (err) {
-        res.send('Error inserting survey with title ' + survey.title)
+        res.send('Error updating survey with title ' + survey.title)
         return console.error(err);
       }
       res.send(result._id + ' Inserted into database')
