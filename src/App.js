@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
-import TimerTrigger from './Components/TimerTrigger/TimerTrigger';
-import WebsiteModal from './Components/WebsiteModal/WebsiteModal';
+import TimerTrigger from './Frontend/Components/TimerTrigger/TimerTrigger';
 
 function App() {
   return (
