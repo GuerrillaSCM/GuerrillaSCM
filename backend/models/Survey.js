@@ -30,7 +30,7 @@ class SurveySchema extends mongoose.Schema {
         default: []
       }], //contains an array of different question objects. 
       // Position in array would be the order of the questions.
-      trigger: [{
+      triggers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Trigger',
         default: []
