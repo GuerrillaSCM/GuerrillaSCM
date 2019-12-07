@@ -1,4 +1,4 @@
-import WebsiteModal from '../WebsiteModal';
+import WebsiteModal from '../WebsiteModal/WebsiteModal';
 
 const React = require('react')
 const ms = require('pretty-ms')

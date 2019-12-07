@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
-import scmLogo from './guerillaSCM.png';
+import scmLogo from '../../Assets/guerillaSCM.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Rating from './StarRating.js';
+import Rating from '../StarRating/StarRating';
 import './UserSurvey.css';
 
 class UserSurvey extends Component {
