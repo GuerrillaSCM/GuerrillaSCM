@@ -4,6 +4,7 @@
 */
 
 const express = require('express');
+const cors = require('cors') //used to allow cross-origin support
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+app.use(cors());
 
 // Routing API end point assignments
 app.use('/api/response/', responseRoutes);
