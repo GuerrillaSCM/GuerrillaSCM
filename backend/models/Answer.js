@@ -14,6 +14,10 @@ class AnswerSchema extends mongoose.Schema {
         type: Number,
         default: 0
       }, // ID of the question it is responding to
+      stars: {
+        type: Number,
+        default: null
+      } //integer from 1-5 for the number of stars
     });
   }
 }
