@@ -3,18 +3,16 @@ import axios from 'axios'
 
 const { Provider, Consumer } = React.createContext();
 
-const URL = "http://localhost:3005/api/";
+const LOCAL = "http://localhost:3005/api/";
+const RESPONSE = "response/survey/";
 
 class AxiosContextProvider extends Component {
     
 
 
-    // getResponse() {
-    //     axios.get(URL + "response/survey/5dec493cf525a2415c89c290")
-    //     .then(reponse => {
-    //         console.log(response);
-    //     });
-    // }
+    getAllResponses(id) {
+        return (axios.get(LOCAL + RESPONSE+ id))
+    }
 
 
     render() {

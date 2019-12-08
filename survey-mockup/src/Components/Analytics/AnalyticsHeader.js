@@ -28,13 +28,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-//should receive user statistics
-/*
-    param: props.title (Total Surveys Created......)
-           props.value (Equivalent value)
-    
-    onClick listener for create a new survey also should be here
-*/
 function AnalyticsHeader(props) {
 
     const classes = useStyles();
@@ -44,14 +37,10 @@ function AnalyticsHeader(props) {
             <Paper className={classes.root}>
                 <div className={classes.texts}>
                 <Typography variant="h5" gutterBottom >
-                    Analytics: <span>Survey[i].name</span>
+                    Analytics: <span>{props.title}</span>
                 </Typography>
 
                 <Divider className={classes.distance}/>
-
-                <Typography variant="overline" guttermBottom>
-                   
-                </Typography>
 
                 <React.Fragment>
                     <Grid container spacing={1} direction="column" alignItems="flex-start">

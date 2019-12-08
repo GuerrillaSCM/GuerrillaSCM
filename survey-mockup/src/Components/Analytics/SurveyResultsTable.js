@@ -17,6 +17,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { AnalyticsContextConsumer } from '../Context/AnalyticsContextClass'
 
 const tableIcons = {
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -54,55 +55,33 @@ function SurveyResultsTable() {
 
     const classes = useStyles();
 
-    /* 
-        //a potential way we can use objects
-        const [state,setState] = React.useState({})
-        const changeState = () => {
-            setState(props.object);
-        }
-    */
-
-    //dummy data. Separate column from data and were good
-    const [state, setState] = React.useState({
-        columns: [
-            { title: 'Response Number', field: 'resNum' },
-            { title: 'Question', field: 'question' },
-            { title: 'Rating', field: 'stars' },
-        ],
-
-        //Dummy data
-        data: [
-            { resNum: 1, question: '[<Question from the survey goes here>]', stars: 3 },
-            { resNum: 2, question: '[<Question from the survey goes here>]', stars: 3 },
-            { resNum: 3, question: '[<Question from the survey goes here>]', stars: 4 },
-            { resNum: 4, question: '[<Question from the survey goes here>]', stars: 2 },
-            { resNum: 5, question: '[<Question from the survey goes here>]', stars: 3 },
-            { resNum: 6, question: '[<Question from the survey goes here>]', stars: 5 },
-            { resNum: 7, question: '[<Question from the survey goes here>]', stars: 3 },
-            { resNum: 8, question: '[<Question from the survey goes here>]', stars: 4 },
-            { resNum: 9, question: '[<Question from the survey goes here>]', stars: 3 },
-            { resNum: 10, question: '[<Question from the survey goes here>]', stars: 5 },
-        ],
-
-    });
-
     return (
         <div className={classes.root}>
-            <MaterialTable
-                title="Survey Responses"
-                columns={state.columns}
-                data={state.data}
-                icons={tableIcons}
-                actions={[
-                    {
-                        icon: () => <VisibilityIcon />,
-                        tooltip: 'View Details',
-                    },
-                ]}
-                options={{
-                    actionsColumnIndex: 4,
-                }}
-            />
+            <AnalyticsContextConsumer>
+                {({ analyticsObject }) => (
+                    <div>
+                    <MaterialTable
+                        title="Survey Responses"
+                        columns={analyticsObject.columns}
+                        data={analyticsObject.responses}
+                        icons={tableIcons}
+                    //not sure if this is needed since we dont have anything here, unless
+                    //we want to single out each response. But probably not this iteration
+                    // **WE SHOULD GET THE AVERAGE STARS THO** 
+                    // actions={[
+                    //     {
+                    //         icon: () => <VisibilityIcon />,
+                    //         tooltip: 'View Details',
+                    //     },
+                    // ]}
+                    // options={{
+                    //     actionsColumnIndex: 4,
+                    // }}
+                    />
+                    {/* {getArray(analyticsObject.responses)} */}
+                    </div>
+                )}
+            </AnalyticsContextConsumer>
         </div>
     );
 }

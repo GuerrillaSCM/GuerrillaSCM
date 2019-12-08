@@ -1,20 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 
 
 const { Provider, Consumer } = React.createContext();
 
 class SurveyContextProvider extends Component {
-  
-    //https://jsonplaceholder.typicode.com/posts/
-    componentDidMount() {
-        // axios.get("http://localhost:3005/api/survey/survey/5dec493cf525a2415c89c290")
-        // .then(response => {
-        //     console.log(response);
-        // })
-    }
-
-
 
     /*
         Im not sure if we should do the fetch here.

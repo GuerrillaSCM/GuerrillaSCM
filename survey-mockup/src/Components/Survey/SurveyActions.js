@@ -45,9 +45,6 @@ const useStyles = makeStyles(theme => ({
 */
 export default function SurveyActions(props) {
 
-  /* useEffect is called everytime the page is rerendered. So when there are changes.
-  put [] as the second argument of useEffect and it will act like component did mount */
-
   const [reqHelperText, setReqHelperText] = React.useState("");
 
   const [isError, setIsError] = React.useState(false);
@@ -69,28 +66,18 @@ export default function SurveyActions(props) {
     setOpen(false);
   };
 
-  //cant use this coz we want to return a boolean value
-  const [isDisabled, setIsDisbled] = React.useState(false);
 
-  //this is getting called 3 times. Ok for now coz i dont want to think rn
+  //could be improved....
   const isPopulated = (surveyObject) => {
-    //if title is not empty
     if(surveyObject.surveyTitle.length) {
       return false;
     }
-    //if questions is not empty
     if(surveyObject.questions.length) {
       return false;
     }
-    //everything is empty
     return true;
   }
 
-
-  //do this for published
-  const isSaved = () => {
-
-  }
 
   return (
     <Paper className={classes.root}>
@@ -128,18 +115,18 @@ export default function SurveyActions(props) {
           )}
         </SurveyContextConsumer>
       </React.Fragment>
-      
+
       <React.Fragment>
-      <SurveyContextConsumer>
-        {({survey}) => (
-          <Grid container spacing={1} direction="column" alignItems="flex-start">
+        <SurveyContextConsumer>
+          {({survey}) => (
+            <Grid container spacing={1} direction="column" alignItems="flex-start">
         <Grid item>
             <Button
             variant="contained"
             color="primary"
             size="large"
-            className={classes.marginAlign}
             disabled={isPopulated(survey)}
+            className={classes.marginAlign}
             >Publish</Button>
             <Button
             variant="contained"
@@ -171,10 +158,9 @@ export default function SurveyActions(props) {
             className={classes.marginAlign}>Get Embeddable Code</Button>
         </Grid>
       </Grid>
-        )}
+          )}
       </SurveyContextConsumer>
       </React.Fragment>
-      
       <SurveyContextConsumer>
           {({addQuestionListener}) => (
           <QuestionModal open={open} onClose={handleClose} onAdd={addQuestionListener} buttonText="Add"/>

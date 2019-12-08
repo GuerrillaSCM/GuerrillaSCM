@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SurveyPage from '../Survey/SurveyCreationPage';
 import HomePage from '../Home/HomePage';
-import Container from '@material-ui/core/Container'
+import Container from '@material-ui/core/Container';
 import AnalyticsPage from '../Analytics/AnalyticsPage';
 
 
