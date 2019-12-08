@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import ApiCalls from '../Axios/ApiCall'
 
 const { Provider, Consumer } = React.createContext();
-
 
 class HomeContextProvider extends Component {
 
@@ -10,40 +9,70 @@ class HomeContextProvider extends Component {
     //setting it somewhere else look better tbh. 
     //fetch the back end stuff here.
     state = {
-    //    // dummy data
-        surveys: [
-             { title: 'Test Survey 1', published: 'Yes', creationTime: '11/21/2019'},
+        columns: [
+            { title: 'Name', field: 'title' },
+            { title: 'Published Status', field: 'published' },
+            { title: 'Date Created', field: 'creationTime' },
         ],
-    //     //we just need userId to grab all of the needed information??
-    //     userId: "",
-    //     userName: "",
+        //dummy data
+        surveys: [],
+        //we just need userId to grab all of the needed information??
+        userId: "",
+        userName: "",
     }
 
-    addQuestionHandler = (surveyObject) => {
+    /*
+        Calls this function when the app starts.
+        Gets all information we need from the user.
+
+        FIXME getASurvey is what were using rn
+        **should be using getAllSurveys but i think its not setup yet**
+
+        using map instead of loop because 
+        https://medium.com/@ExplosionPills/map-vs-for-loop-2b4ce659fb03
+
+        looks cleaner
+    */
+    componentDidMount() {
+        //Gets all the surveys
+        ApiCalls.getAllSurveys("TestPacito").then(response => {
+            //this shouldnt be here. Get user info once we have one
+            this.userItemHandler(response.data[0]);
+
+            response.data.map(element => (
+                this.addSurveyHandler(element)
+            ))
+        });
+    }
+
+    /*
+        This function will update the current table of surveys that we have
+    */
+    //componentDidUpdate() {
+
+    //}
+
+    userItemHandler(apiResponseObject) {
+        this.setState({
+            userName: apiResponseObject.owner,
+            userId: apiResponseObject._id,
+        })
+    }
+
+    /*
+        Takes in a single survey object and builds the off of that 
+    */
+    addSurveyHandler(surveyObject) {
         this.setState(prevState => ({
             surveys: [...prevState.surveys, {
-                //questionId: this.createNewId(), 
-                ...surveyObject
+                title: surveyObject.title,
+                published: surveyObject.published,
+                creationTime: surveyObject.creationTime,
+                key: surveyObject._id
             }]
         }))
     }
 
-    componentDidMount() {
-    
-        axios.get("http://localhost:3005/api/survey/survey/5dec493cf525a2415c89c290") //+ "response/survey/5dec493cf525a2415c89c290")
-        .then(response => {
-            console.log(response.data);
-            this.addQuestionHandler({title: response.data.title, published: response.data.published,
-            creationTime: response.data.creationTime})
-        });
-
-        // //prevState => {
-        //     prevState.surveys = response;
-        // }
-    
-}
-
-    
 
     homeObjectChangedHandler = (homeObjectInput) => {
         this.setState({ homeObjectInput })

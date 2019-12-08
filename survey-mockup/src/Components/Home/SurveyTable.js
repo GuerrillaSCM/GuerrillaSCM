@@ -64,21 +64,14 @@ function SurveyTable() {
         }
     */
 
-    const columns = [
-            { title: 'Name', field: 'title' },
-            { title: 'Published Status', field: 'published' },
-            { title: 'Date Created', field: 'creationTime' },
-        ]
-
-
     return (
         <div className={classes.root}>
             <HomeContextConsumer>
                 {({homeObject}) => (
                     <MaterialTable
                         title="Surveys"
-                        columns={columns}
-                        data={homeObject.surveys}//title: homeObject.title, published: homeObject.published, creationTime: homeObject.creationTime}}
+                        columns={homeObject.columns}
+                        data={homeObject.surveys}
                         icons={tableIcons}
                         actions={[
                             {
@@ -88,7 +81,7 @@ function SurveyTable() {
                             },
                             {
                                 icon: () => <VisibilityIcon />,
-                                tooltip: 'Preview Survey',
+                                tooltip: 'View Survey Analytics',
                                 onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
                             },
                             {
