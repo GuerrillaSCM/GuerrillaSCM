@@ -1,10 +1,29 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 
 
 const { Provider, Consumer } = React.createContext();
 
 class SurveyContextProvider extends Component {
+  
+    //https://jsonplaceholder.typicode.com/posts/
+    componentDidMount() {
+        // axios.get("http://localhost:3005/api/survey/survey/5dec493cf525a2415c89c290")
+        // .then(response => {
+        //     console.log(response);
+        // })
+    }
 
+
+
+    /*
+        Im not sure if we should do the fetch here.
+        The reason im assigning the props
+        and not creating the object here is becuase 
+        idk what im doing and i havent thought it through
+        to the point where ive thought about the trade offs.
+        Its a pretty easy fix to move stuff too. 
+    */
     state = this.props.surveyObjectParent;
 
     createNewId = require('uuid/v1');
