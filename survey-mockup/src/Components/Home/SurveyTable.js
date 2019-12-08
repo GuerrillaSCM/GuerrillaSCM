@@ -96,19 +96,21 @@ function SurveyTable() {
                     {
                         icon: () => <Edit />,
                         tooltip: 'Edit Survey',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name),
+                        onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
                     },
                     {
                         icon: () => <VisibilityIcon />,
                         tooltip: 'Preview Survey',
+                        onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
                     },
                     {
                         icon: () => <DeleteOutline />,
                         tooltip: 'Delete Survey',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name)
+                        onClick: (event, rowData) => alert("This is a placeholder " + rowData.name)
                     },
                 ]}
                 options={{
+                    //index of actions column in the table
                     actionsColumnIndex: 4,
                 }}
             />

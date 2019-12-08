@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import StarIcon from '@material-ui/icons/Star';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,6 +8,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItem from '@material-ui/core/ListItem';
+import {SurveyContextConsumer} from '../Context/SurveyContextClass'
+import QuestionModal from '../Modal/QuestionModal';
 
 /*
     param: props.question (Question text)
@@ -16,7 +18,19 @@ import ListItem from '@material-ui/core/ListItem';
            data with an id, also serves as the list key which is kinda required.
 */
 
-const surveyQuestionList = (props) =>{
+export default function SurveyQuestionList(props) {
+
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = value => {
+      setOpen(false);
+    };
+
+
     return (
         <div className="">
             <ListItem>
@@ -31,16 +45,29 @@ const surveyQuestionList = (props) =>{
                     id={props.id}
                 />
                 <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete" onClick={() => props.onDelete(props.id)}>
-                        <DeleteIcon />
-                    </IconButton>
-                    <IconButton edge="end" aria-label="delete">
-                        <EditIcon />
-                    </IconButton>
+                    <SurveyContextConsumer> 
+                        {({removeQuestionListener}) => (
+                            <IconButton edge="end" aria-label="delete" onClick={() => removeQuestionListener(props.id)}>
+                            <DeleteIcon />
+                            </IconButton>
+                        )}
+                    </SurveyContextConsumer>
+                        <IconButton edge="end" aria-label="delete" onClick={handleClickOpen}>
+                            <EditIcon />
+                        </IconButton>
                 </ListItemSecondaryAction>
             </ListItem>
+        {/* Open question dialog from clicking edit */}
+         <SurveyContextConsumer>
+          {({editQuestionListener}) => (
+          <QuestionModal open={open} onClose={handleClose} onAdd={editQuestionListener} 
+          questionId={props.id} 
+          questionText={props.question} 
+          questionType={props.type}
+          buttonText="Update"
+          />
+          )}
+          </SurveyContextConsumer>
         </div>
     );
 }
-
-export default surveyQuestionList;

@@ -45,7 +45,7 @@ function HomeHeader(props) {
                     Welcome Back, <span>User!</span>
                 </Typography>
                 <Divider className={classes.distance}/>
-                <Typography variant="overline" guttermBottom>
+                <Typography variant="overline" gutterBottom>
                    
                 </Typography>
                 <Button color="primary" variant="contained">
