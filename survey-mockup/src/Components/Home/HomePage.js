@@ -1,6 +1,7 @@
 import React from 'react'
 import HomeHeader from './HomeHeader'
 import SurveyTable from './SurveyTable'
+import {HomeContextProvider} from '../Context/HomeContextClass'
 
 
 //get user id
@@ -10,8 +11,10 @@ import SurveyTable from './SurveyTable'
 const homePage = () => {
     return(
         <div>
-            <HomeHeader/>
-            <SurveyTable/>
+            <HomeContextProvider>
+                <HomeHeader/>
+                <SurveyTable/>
+            </HomeContextProvider>
         </div>
     );
 }

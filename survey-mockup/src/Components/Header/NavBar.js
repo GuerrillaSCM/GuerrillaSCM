@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import SurveyPage from '../Survey/SurveyCreationPage';
 import HomePage from '../Home/HomePage';
 import Container from '@material-ui/core/Container'
+import AnalyticsPage from '../Analytics/AnalyticsPage';
 
 
 function TabPanel(props) {
@@ -88,7 +89,7 @@ export default function ScrollableTabsButtonForce() {
         <SurveyPage/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        
+        <AnalyticsPage/>
       </TabPanel>
       </Container>
     </div>

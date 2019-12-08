@@ -18,8 +18,6 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
-import { HomeContextConsumer } from '../Context/HomeContextClass';
-
 const tableIcons = {
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
@@ -52,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     param: Optional: props.columns
            props.data (Could be an object that contains the name, status, datacreated........)
 */
-function SurveyTable() {
+function SurveyResultsTable() {
 
     const classes = useStyles();
 
@@ -64,48 +62,49 @@ function SurveyTable() {
         }
     */
 
-    const columns = [
-            { title: 'Name', field: 'title' },
-            { title: 'Published Status', field: 'published' },
-            { title: 'Date Created', field: 'creationTime' },
-        ]
+    //dummy data. Separate column from data and were good
+    const [state, setState] = React.useState({
+        columns: [
+            { title: 'Response Number', field: 'resNum' },
+            { title: 'Question', field: 'question' },
+            { title: 'Rating', field: 'stars' },
+        ],
 
+        //Dummy data
+        data: [
+            { resNum: 1, question: '[<Question from the survey goes here>]', stars: 3 },
+            { resNum: 2, question: '[<Question from the survey goes here>]', stars: 3 },
+            { resNum: 3, question: '[<Question from the survey goes here>]', stars: 4 },
+            { resNum: 4, question: '[<Question from the survey goes here>]', stars: 2 },
+            { resNum: 5, question: '[<Question from the survey goes here>]', stars: 3 },
+            { resNum: 6, question: '[<Question from the survey goes here>]', stars: 5 },
+            { resNum: 7, question: '[<Question from the survey goes here>]', stars: 3 },
+            { resNum: 8, question: '[<Question from the survey goes here>]', stars: 4 },
+            { resNum: 9, question: '[<Question from the survey goes here>]', stars: 3 },
+            { resNum: 10, question: '[<Question from the survey goes here>]', stars: 5 },
+        ],
+
+    });
 
     return (
         <div className={classes.root}>
-            <HomeContextConsumer>
-                {({homeObject}) => (
-                    <MaterialTable
-                        title="Surveys"
-                        columns={columns}
-                        data={homeObject.surveys}//title: homeObject.title, published: homeObject.published, creationTime: homeObject.creationTime}}
-                        icons={tableIcons}
-                        actions={[
-                            {
-                                icon: () => <Edit />,
-                                tooltip: 'Edit Survey',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
-                            },
-                            {
-                                icon: () => <VisibilityIcon />,
-                                tooltip: 'Preview Survey',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
-                            },
-                            {
-                                icon: () => <DeleteOutline />,
-                                tooltip: 'Delete Survey',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.name)
-                            },
-                        ]}
-                        options={{
-                            //index of actions column in the table
-                            actionsColumnIndex: 4,
-                        }}
-                    />
-                )}
-            </HomeContextConsumer>
+            <MaterialTable
+                title="Survey Responses"
+                columns={state.columns}
+                data={state.data}
+                icons={tableIcons}
+                actions={[
+                    {
+                        icon: () => <VisibilityIcon />,
+                        tooltip: 'View Details',
+                    },
+                ]}
+                options={{
+                    actionsColumnIndex: 4,
+                }}
+            />
         </div>
     );
 }
 
-export default SurveyTable;
+export default SurveyResultsTable;
