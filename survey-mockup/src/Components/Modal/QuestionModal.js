@@ -32,7 +32,7 @@ export default function AddQuestionDialog(props) {
     const createNewId = require('uuid/v1');
 
     const itemId = () => {
-        console.log(props.questionId)
+        //console.log(props.questionId)
         if(props.questionId === undefined || props.questionId === null) {
             return createNewId();
         }
