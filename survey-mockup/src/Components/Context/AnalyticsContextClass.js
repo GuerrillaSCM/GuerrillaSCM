@@ -15,13 +15,12 @@ class AnalyticsContextProvider extends Component {
     state = {
         columns: [
             { title: 'Response Number', field: 'resNum' },
+            { title: 'Response Id', field: 'resId' },
             { title: 'Question', field: 'question' },
             { title: 'Rating', field: 'stars' },
         ],
         surveyId: this.props.surveyId,
-        responses: [
-            {answers: []},
-        ],
+        responses: [],
     }
 
     componentDidUpdate() {
@@ -37,7 +36,7 @@ class AnalyticsContextProvider extends Component {
         //hard coded rn but should be this.state.surveyId
         ApiCalls.getAllSurveyResponses("5dec493cf525a2415c89c290")
         .then(response => {
-            console.log(response.data)
+            //console.log(response.data)
             response.data.map((element,index) => ( //response element
                this.responseListHandler(element,index+1)
             ))
@@ -50,14 +49,14 @@ class AnalyticsContextProvider extends Component {
         since we only have one question. 
 
         FIXME
-        Theres always an object that shouldnt be there, its called proto
-        or smthng but that object gets added to analytics when it shouldnt.
+        NVM im stupid, I was creating an empty object
     */
     responseListHandler(responseObject,index) {
         this.setState(prevState => ({ 
             responses: [...prevState.responses, {
                 //kind of hard coding it rn coz im tired and i dont want to think anymore...
                 resNum: index,
+                resId: responseObject.answers[0]._id,
                 question: responseObject.answers[0].answerType,
                 stars: responseObject.answers[0].stars,
                 key: responseObject.answers[0]._id

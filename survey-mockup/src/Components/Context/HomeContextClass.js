@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ApiCalls from '../Axios/ApiCall'
 
+import axios from 'axios'
+
 const { Provider, Consumer } = React.createContext();
 
 class HomeContextProvider extends Component {
@@ -45,6 +47,7 @@ class HomeContextProvider extends Component {
         });
     }
 
+
     /*
         This function will update the current table of surveys that we have
     */
@@ -79,12 +82,12 @@ class HomeContextProvider extends Component {
     }
 
     render() {
-        return(
-            <Provider value={{homeObject: this.state}}>
+        return (
+            <Provider value={{ homeObject: this.state }}>
                 {this.props.children}
             </Provider>
         );
     }
 }
 
-export {HomeContextProvider, Consumer as HomeContextConsumer}
+export { HomeContextProvider, Consumer as HomeContextConsumer }

@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import StatisticsCard from './StatisticsCard'
 import Grid from '@material-ui/core/Grid'
 import { HomeContextConsumer } from '../Context/HomeContextClass'
+import {Link} from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme => ({
@@ -45,6 +46,18 @@ function HomeHeader(props) {
         //surveys.map(survey => {if(survey.published === true) activeSurvey++;})
     }
 
+    const printStatus= (status) => {
+        if(status.length === 0) {
+            return(
+                <div>
+                    <Typography variant="overline" gutterBottom style={{color:"red"}}>
+                        Server might be offline
+                    </Typography>
+                </div>
+            );
+        }
+    }
+
     return (
         <Paper className={classes.root}>
             <HomeContextConsumer>
@@ -53,13 +66,14 @@ function HomeHeader(props) {
                         <Typography variant="h5" gutterBottom >
                 Welcome Back, <span>{homeObject.userName}</span>
                         </Typography>
+                        {/* Comment out this line later */}
+                        {printStatus(homeObject.userName)}
                         <Divider className={classes.distance} />
                         <Typography variant="overline" gutterBottom>
-
                         </Typography>
-                        <Button color="primary" variant="contained">
+                        <Button color="primary" variant="contained" to="/create" component={Link}>
                             Create A New Survey
-                </Button>
+                        </Button>
                         <div className={classes.distance}></div>
                         {/*<Divider className={classes.distance}/>
                 <Typography variant="overline" guttermBottom>

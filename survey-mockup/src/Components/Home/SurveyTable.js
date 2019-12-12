@@ -20,6 +20,11 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { HomeContextConsumer } from '../Context/HomeContextClass';
 
+//Test 
+import {Link} from 'react-router-dom'
+import AnalyticsPage from '../Analytics/AnalyticsPage'
+import { useHistory } from "react-router-dom";
+
 const tableIcons = {
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
@@ -54,7 +59,18 @@ const useStyles = makeStyles(theme => ({
 */
 function SurveyTable() {
 
+    let history = useHistory();
+
     const classes = useStyles();
+
+
+    /*
+        OnClick we could either put the userId that was clicked 
+        or pass the id prop through the history.
+    */
+    const renderPage = () => {
+        history.push('/analytics')
+    }
 
     /* 
         //a potential way we can use objects
@@ -82,12 +98,12 @@ function SurveyTable() {
                             {
                                 icon: () => <VisibilityIcon />,
                                 tooltip: 'View Survey Analytics',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
+                                onClick: (event, rowData) => history.push('/analytics/'+ rowData.key),
                             },
                             {
                                 icon: () => <DeleteOutline />,
                                 tooltip: 'Delete Survey',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.name)
+                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.key)
                             },
                         ]}
                         options={{
