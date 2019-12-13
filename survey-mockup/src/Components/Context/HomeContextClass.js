@@ -39,11 +39,13 @@ class HomeContextProvider extends Component {
         //Gets all the surveys
         ApiCalls.getAllSurveys("TestPacito").then(response => {
             //this shouldnt be here. Get user info once we have one
-            this.userItemHandler(response.data[0]);
+            if(response.data.length > 0) {
+                this.userItemHandler(response.data[0]);
 
-            response.data.map(element => (
-                this.addSurveyHandler(element)
-            ))
+                response.data.map(element => (
+                    this.addSurveyHandler(element)
+                ))
+            }
         });
     }
 

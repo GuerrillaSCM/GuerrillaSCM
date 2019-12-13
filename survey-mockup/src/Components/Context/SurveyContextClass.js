@@ -38,19 +38,21 @@ class SurveyContextProvider extends Component {
         if (url.split('/').length === 3) {
             id = url.split('/')[2];
         }
-        ApiCall.getASurvey(id)
-        .then(response => {
-            console.log(response.data)
-            this.setState({
-                title : response.data.title,
-                creationDate : response.data.creationTime,
-                isPublished : response.data.published,
-                surveyId : response.data._id,
-                questions : response.data.questions,
-            })
-        }).catch(error => {
-            console.log(error)
-        });
+        if(id !== "") {
+            ApiCall.getASurvey(id)
+            .then(response => {
+                console.log(response.data)
+                this.setState({
+                    title : response.data.title,
+                    creationDate : response.data.creationTime,
+                    isPublished : response.data.published,
+                    surveyId : response.data._id,
+                    questions : response.data.questions,
+                })
+            }).catch(error => {
+                console.log(error)
+            });
+        }
     }
 
     testChange = (someObject) => {
