@@ -31,9 +31,7 @@ class ApiCall {
     static getEmbedCode(id) {
         //return (axios.get(URL + EMBED + id));
         return (
-        "<script src=\"https://unpkg.com/react@16/umd/react.development.js\" crossorigin></script>" + 
-        "<script src=\"https://unpkg.com/react-dom@16/umd/react-dom.development.js\" crossorigin></script> " +
-        "<script src=\"./main.js\" embeddID=\"" + id + "\"></script>"
+        "<script type=\"text/javascript\" id=\"embedID\" data-name=\"" + id + "\" src=\"http://localhost:3005/embed/main.js\"></script>"
         );
     }
 
