@@ -8,6 +8,7 @@ import StatisticsCard from './StatisticsCard'
 import Grid from '@material-ui/core/Grid'
 import { HomeContextConsumer } from '../Context/HomeContextClass'
 import {Link} from 'react-router-dom'
+import LOGO from '../Assets/cap_logo.png'
 
 
 const useStyles = makeStyles(theme => ({
@@ -64,7 +65,8 @@ function HomeHeader(props) {
                 {({homeObject}) => (
                     <div className={classes.texts}>
                         <Typography variant="h5" gutterBottom >
-                Welcome Back, <span>{homeObject.userName}</span>
+                Welcome Back, <span>{homeObject.userName} </span>
+                <img src={LOGO} height={20} width={20} />
                         </Typography>
                         {/* Comment out this line later */}
                         {printStatus(homeObject.userName)}
