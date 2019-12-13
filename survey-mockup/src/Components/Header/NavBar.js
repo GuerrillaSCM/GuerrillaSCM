@@ -14,7 +14,7 @@ import HomePage from '../Home/HomePage';
 import Container from '@material-ui/core/Container';
 import AnalyticsPage from '../Analytics/AnalyticsPage';
 
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Redirect } from 'react-router-dom';
 
 
 function TabPanel(props) {
@@ -82,8 +82,9 @@ export default function ScrollableTabsButtonForce() {
 
   return (
     <div className={classes.root}>
+      {/* <Redirect exact from="/" to="home" /> */}
       <AppBar position="static" color="primary">
-        <Container maxWidth="lg">
+        {/*<Container maxWidth="lg"> */}
           <Tabs
             value={value}
             onChange={handleChange}
@@ -98,16 +99,14 @@ export default function ScrollableTabsButtonForce() {
             FIXME 
               Fix the margins of each rendered page. It looks aweful
             */}
-            <Tab label="Home" to="/home" component={Link} icon={<HomeIcon />} {...a11yProps(0)} />
-            <Tab label="Survey Creation" to="/create" component={Link} icon={<SurveyIcon />} {...a11yProps(1)} />
-            <Tab label="Analytics" to="/analytics" component={Link} icon={<AnalyticsIcon />} {...a11yProps(2)} />
+            <Tab label="Home" to="/" component={Link} icon={<HomeIcon />} {...a11yProps(0)} />
+            <Tab label="Survey Creation" to="/create" component={Link} icon={<SurveyIcon />} {...a11yProps(1)} disabled={true} />
+            <Tab label="Analytics" to="/analytics" component={Link} icon={<AnalyticsIcon />} {...a11yProps(2)} disabled={true}/>
           </Tabs>
-        </Container>
+        {/* </Container> */}
       </AppBar>
 
-     
-
-      <Route path="/home" component={HomePage}/>
+      <Route path="/" exact component={HomePage}/>
       <Route path="/create" component={SurveyPage}/>
       <Route path="/analytics" component={AnalyticsPage}/>
 

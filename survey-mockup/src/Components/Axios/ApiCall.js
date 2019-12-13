@@ -37,6 +37,10 @@ class ApiCall {
         );
     }
 
+    static deleteSurvey(id) {
+        return (axios.delete(LOCAL_URL + SURVEY + SURVEY + id));
+    }
+
 
     /*
         Gets all survey responses from an id

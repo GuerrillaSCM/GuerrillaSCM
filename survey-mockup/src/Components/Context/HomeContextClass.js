@@ -81,9 +81,28 @@ class HomeContextProvider extends Component {
         this.setState({ homeObjectInput })
     }
 
+    deleteSurveyHandler = (survId) => {
+        ApiCalls.deleteSurvey(survId).then(response => {
+            this.removeSurveyHandler(survId);
+            window.location.reload(false);
+            console.log(response);   
+        }).catch(error => {
+            console.log(error)
+        })
+        
+       // this.setState({ state: this.state });
+    }
+
+    removeSurveyHandler = (survId) => {
+        this.setState(prevState => ({
+            surveys: prevState.surveys.filter(survey => survey.surveyId !== survId)
+        }))
+    }
+
     render() {
         return (
-            <Provider value={{ homeObject: this.state }}>
+            <Provider value={{ homeObject: this.state,
+                               deleteSurveyListener: this.deleteSurveyHandler}}>
                 {this.props.children}
             </Provider>
         );

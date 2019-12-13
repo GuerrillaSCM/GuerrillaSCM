@@ -36,8 +36,8 @@ function AnalyticsHeader(props) {
         
             <Paper className={classes.root}>
                 <div className={classes.texts}>
-                <Typography variant="h5" gutterBottom >
-                    Analytics: <span>{props.title}</span>
+                <Typography variant="h2" gutterBottom >
+                    Analytics <span>{props.title}</span>
                 </Typography>
 
                 <Divider className={classes.distance}/>

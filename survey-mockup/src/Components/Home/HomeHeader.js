@@ -64,9 +64,9 @@ function HomeHeader(props) {
             <HomeContextConsumer>
                 {({homeObject}) => (
                     <div className={classes.texts}>
-                        <Typography variant="h5" gutterBottom >
+                        <Typography variant="h2" gutterBottom >
                 Welcome Back, <span>{homeObject.userName} </span>
-                <img src={LOGO} height={20} width={20} />
+                <img src={LOGO} height={55} width={55} />
                         </Typography>
                         {/* Comment out this line later */}
                         {printStatus(homeObject.userName)}

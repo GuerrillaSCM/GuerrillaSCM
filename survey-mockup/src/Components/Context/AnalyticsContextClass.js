@@ -16,7 +16,7 @@ class AnalyticsContextProvider extends Component {
         columns: [
             { title: 'Response Number', field: 'resNum' },
             { title: 'Response Id', field: 'resId' },
-            { title: 'Question', field: 'question' },
+            { title: 'Question Type', field: 'question' },
             { title: 'Rating', field: 'stars' },
         ],
         surveyId: this.props.surveyId,
@@ -43,6 +43,8 @@ class AnalyticsContextProvider extends Component {
         ApiCalls.getAllSurveyResponses(id)
         .then(response => {
             if (response.data.length > 0)
+            //answers array
+            console.log(response.data)
                 response.data.map((element, index) => ( //response element
                     this.responseListHandler(element, index + 1)
                 ))

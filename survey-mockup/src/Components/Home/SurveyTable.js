@@ -21,7 +21,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { HomeContextConsumer } from '../Context/HomeContextClass';
 
 //Test 
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AnalyticsPage from '../Analytics/AnalyticsPage'
 import { useHistory } from "react-router-dom";
 
@@ -86,7 +86,7 @@ function SurveyTable() {
     return (
         <div className={classes.root}>
             <HomeContextConsumer>
-                {({homeObject}) => (
+                {({ homeObject, deleteSurveyListener }) => (
                     <MaterialTable
                         title="Surveys"
                         columns={homeObject.columns}
@@ -106,7 +106,7 @@ function SurveyTable() {
                             {
                                 icon: () => <DeleteOutline />,
                                 tooltip: 'Delete Survey',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.key)
+                                onClick: (event, rowData) => deleteSurveyListener(rowData.key)
                             },
                         ]}
                         options={{
