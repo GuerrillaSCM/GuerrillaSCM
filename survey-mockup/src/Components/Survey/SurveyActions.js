@@ -69,13 +69,24 @@ export default function SurveyActions(props) {
 
   //could be improved....
   const isPopulated = (surveyObject) => {
-    if(surveyObject.surveyTitle.length) {
+    if(surveyObject.title.length) {
       return false;
     }
     if(surveyObject.questions.length) {
       return false;
     }
     return true;
+  }
+
+  const test = (title) => {
+    console.log(title)
+    return title;
+  }
+
+  const test2 = () => {
+    const title = document.getElementById("surveyName").value
+    return title;
+    // return (const survey.title = document.getElementById("surveyName").value)
   }
 
 
@@ -94,9 +105,10 @@ export default function SurveyActions(props) {
             fullWidth
             label="Survey Name"
             helperText={reqHelperText}
-            defaultValue={survey.surveyTitle}
+            placeholder = {survey.title}
+            defaultValue={survey.title === undefined ? "": survey.title}
             onChange={() => surveyChangeListener(
-              survey.surveyTitle = document.getElementById("surveyName").value
+              survey.title = document.getElementById("surveyName").value
             )}
           />
           )}
@@ -118,14 +130,14 @@ export default function SurveyActions(props) {
 
       <React.Fragment>
         <SurveyContextConsumer>
-          {({survey}) => (
+          {({survey, saveSurveyListener, embedCodeListener}) => (
             <Grid container spacing={1} direction="column" alignItems="flex-start">
         <Grid item>
             <Button
             variant="contained"
             color="primary"
             size="large"
-            disabled={isPopulated(survey)}
+            disabled={true}
             className={classes.marginAlign}
             >Publish</Button>
             <Button
@@ -134,6 +146,7 @@ export default function SurveyActions(props) {
             size="large"
             disabled={isPopulated(survey)}
             className={classes.marginAlign}
+            onClick={() => saveSurveyListener()}
             >Save</Button>
         </Grid>
         <Grid item>     
@@ -149,11 +162,13 @@ export default function SurveyActions(props) {
             variant="contained"
             color="secondary"
             size="large"
+            disabled={true}
             className={classes.marginAlign}>Configure Trigger</Button>
             <Button
             variant="contained"
             color="secondary"
             size="large"
+            onClick={() => embedCodeListener()}
             disabled={isPopulated(survey)}
             className={classes.marginAlign}>Get Embeddable Code</Button>
         </Grid>

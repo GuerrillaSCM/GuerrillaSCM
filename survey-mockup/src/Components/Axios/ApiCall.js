@@ -16,7 +16,28 @@ const SURVEY = "survey/";
 
 const RESPONSE = "response/";
 
+const EMBED = "embed/";
+
 class ApiCall {
+
+    static postSurvey(surveyObject,id) {
+        return (axios.post(LOCAL_URL + SURVEY + USER + id, surveyObject));
+    }
+
+    static updateSurvey(surveyObject,id) {
+        return (axios.put(LOCAL_URL + SURVEY + SURVEY + id, surveyObject));
+    }
+
+    static getEmbedCode(id) {
+        //return (axios.get(URL + EMBED + id));
+        return (
+        "<script src=\"https://unpkg.com/react@16/umd/react.development.js\" crossorigin></script>" + 
+        "<script src=\"https://unpkg.com/react-dom@16/umd/react-dom.development.js\" crossorigin></script> " +
+        "<script src=\"./main.js\" embeddID=\"" + id + "\"></script>"
+        );
+    }
+
+
     /*
         Gets all survey responses from an id
         @param: surveyId

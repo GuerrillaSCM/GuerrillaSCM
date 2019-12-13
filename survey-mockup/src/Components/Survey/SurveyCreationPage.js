@@ -31,22 +31,24 @@ export default function SurveyPage (){
 
     const createNewId = require('uuid/v1');
 
-    const mockSurveyObject = {
-        surveyId : createNewId(),
-        surveyTitle: "",
-        creationDate: "12/5/2019",
-        isPublished: "No",
-        //probably need a mock of this object so we have a blueprint or not? 
-        questions : [],
-        trigger : {
-            triggerType: "",
-            triggerOption: "",
-        }
-    }
+    // const mockSurveyObject = {
+    //     //surveyId : createNewId(),
+    //     title: "",
+    //     //creationDate: "12/5/2019",
+    //     //isPublished: "No",
+    //     //probably need a mock of this object so we have a blueprint or not? 
+    //     questions : [],
+    //     triggers : [{
+    //         triggerType: "TimerTrigger",
+    //         timer: "10000",
+    //     }]
+            
+        
+    // }
 
         return(
             <div className="">
-                <SurveyContextProvider surveyObjectParent={mockSurveyObject}>
+                <SurveyContextProvider>
                     <SurveyActions/>
                     <SurveyForm/>
                 </SurveyContextProvider>

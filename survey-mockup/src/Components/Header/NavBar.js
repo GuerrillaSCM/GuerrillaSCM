@@ -105,12 +105,13 @@ export default function ScrollableTabsButtonForce() {
         </Container>
       </AppBar>
 
+     
 
       <Route path="/home" component={HomePage}/>
       <Route path="/create" component={SurveyPage}/>
       <Route path="/analytics" component={AnalyticsPage}/>
 
-
+      
         {/* THIS DOESNT CHANGE THE ROUTES IN THE URL BAR so its basically doing nothing
         
         <TabPanel value={value} index={0} >

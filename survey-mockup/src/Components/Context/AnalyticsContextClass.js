@@ -5,10 +5,10 @@
     following this pattern
 */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ApiCalls from '../Axios/ApiCall'
 
-const {Provider , Consumer} = React.createContext();
+const { Provider, Consumer } = React.createContext();
 
 class AnalyticsContextProvider extends Component {
 
@@ -24,7 +24,7 @@ class AnalyticsContextProvider extends Component {
     }
 
     componentDidUpdate() {
-        
+
     }
 
     /*
@@ -34,12 +34,20 @@ class AnalyticsContextProvider extends Component {
     */
     componentDidMount() {
         //hard coded rn but should be this.state.surveyId
-        ApiCalls.getAllSurveyResponses("5dec493cf525a2415c89c290")
+        const url = (window.location.pathname);
+        let id = "";
+       
+        if (url.split('/').length === 3) {
+            id = url.split('/')[2];
+        }
+        ApiCalls.getAllSurveyResponses(id)
         .then(response => {
-            //console.log(response.data)
-            response.data.map((element,index) => ( //response element
-               this.responseListHandler(element,index+1)
-            ))
+            if (response.data.length > 0)
+                response.data.map((element, index) => ( //response element
+                    this.responseListHandler(element, index + 1)
+                ))
+        }).catch(error => {
+            console.log(error)
         });
     }
 
@@ -51,17 +59,19 @@ class AnalyticsContextProvider extends Component {
         FIXME
         NVM im stupid, I was creating an empty object
     */
-    responseListHandler(responseObject,index) {
-        this.setState(prevState => ({ 
-            responses: [...prevState.responses, {
-                //kind of hard coding it rn coz im tired and i dont want to think anymore...
-                resNum: index,
-                resId: responseObject.answers[0]._id,
-                question: responseObject.answers[0].answerType,
-                stars: responseObject.answers[0].stars,
-                key: responseObject.answers[0]._id
-            }]
-        }));
+    responseListHandler(responseObject, index) {
+        if(responseObject.answers.length > 0) {
+            this.setState(prevState => ({
+                responses: [...prevState.responses, {
+                    //kind of hard coding it rn coz im tired and i dont want to think anymore...
+                    resNum: index,
+                    resId: responseObject.answers[0]._id,
+                    question: responseObject.answers[0].answerType,
+                    stars: responseObject.answers[0].stars,
+                    key: responseObject.answers[0]._id
+                }]
+            }));
+        }
     }
 
     /*
@@ -79,12 +89,12 @@ class AnalyticsContextProvider extends Component {
     }
 
     render() {
-        return(
-            <Provider value={{analyticsObject : this.state}}>
+        return (
+            <Provider value={{ analyticsObject: this.state }}>
                 {this.props.children}
             </Provider>
         );
     }
 }
 
-export {AnalyticsContextProvider, Consumer as AnalyticsContextConsumer}
+export { AnalyticsContextProvider, Consumer as AnalyticsContextConsumer }

@@ -53,6 +53,7 @@ function AnalyticsHeader(props) {
                             variant="contained"
                             color="secondary"
                             size="large"
+                            disabled={true}
                             className={classes.marginAlign}
                             >Embed
                             </Button>
@@ -60,21 +61,25 @@ function AnalyticsHeader(props) {
                             variant="contained"
                             color="secondary"
                             size="large"
+                            disabled={true}
                             className={classes.marginAlign}>Edit</Button>
                             <Button
                             variant="contained"
                             color="secondary"
                             size="large"
+                            disabled={true}
                             className={classes.marginAlign}>Delete</Button>
                             <Button
                             variant="contained"
                             color="secondary"
                             size="large"
+                            disabled={true}
                             className={classes.marginAlign}>Close</Button>
                             <Button
                             variant="contained"
                             color="secondary"
                             size="large"
+                            disabled={true}
                             className={classes.marginAlign}>Survey Preview</Button>
                         </Grid>
                     </Grid>

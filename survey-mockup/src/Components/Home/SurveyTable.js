@@ -68,8 +68,11 @@ function SurveyTable() {
         OnClick we could either put the userId that was clicked 
         or pass the id prop through the history.
     */
-    const renderPage = () => {
-        history.push('/analytics')
+    const switchPage = (url, id) => {
+        //console.log("this is id: " + id)
+        history.push(
+            url + id
+        )
     }
 
     /* 
@@ -93,12 +96,12 @@ function SurveyTable() {
                             {
                                 icon: () => <Edit />,
                                 tooltip: 'Edit Survey',
-                                onClick: (event, rowData) => alert("This is a placeholder " + rowData.name),
+                                onClick: (event, rowData) => switchPage('/create/', rowData.key),
                             },
                             {
                                 icon: () => <VisibilityIcon />,
                                 tooltip: 'View Survey Analytics',
-                                onClick: (event, rowData) => history.push('/analytics/'+ rowData.key),
+                                onClick: (event, rowData) => switchPage('/analytics/', rowData.key),
                             },
                             {
                                 icon: () => <DeleteOutline />,
