@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   function generateQuestionArray(questionArray) {
       if(questionArray.length > 0)
       return questionArray.map(element => <QuestionList 
-        question={element.questionText} 
+        question={element.prompt} 
         type={element.questionType}
         id={element.questionId}
         key={element.questionId}

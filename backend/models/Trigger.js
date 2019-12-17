@@ -9,6 +9,10 @@ class TriggerSchema extends mongoose.Schema {
         type: String,
         default: 'N/A'
       }, // the type of trigger
+      timer: {
+        type: Number,
+        default: 10000
+      } //integer > 0 for timer in ms
     });
   }
 }

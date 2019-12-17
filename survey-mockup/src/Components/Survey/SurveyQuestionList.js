@@ -62,7 +62,7 @@ export default function SurveyQuestionList(props) {
           {({editQuestionListener}) => (
           <QuestionModal open={open} onClose={handleClose} onAdd={editQuestionListener} 
           questionId={props.id} 
-          questionText={props.question} 
+          prompt={props.question} 
           questionType={props.type}
           buttonText="Update"
           />

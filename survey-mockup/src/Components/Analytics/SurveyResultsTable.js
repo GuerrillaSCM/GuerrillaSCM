@@ -17,13 +17,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-
-import { HomeContextConsumer } from '../Context/HomeContextClass';
-
-//Test 
-import { Link } from 'react-router-dom'
-import AnalyticsPage from '../Analytics/AnalyticsPage'
-import { useHistory } from "react-router-dom";
+import { AnalyticsContextConsumer } from '../Context/AnalyticsContextClass'
 
 const tableIcons = {
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -57,67 +51,39 @@ const useStyles = makeStyles(theme => ({
     param: Optional: props.columns
            props.data (Could be an object that contains the name, status, datacreated........)
 */
-function SurveyTable() {
-
-    let history = useHistory();
+function SurveyResultsTable() {
 
     const classes = useStyles();
 
-
-    /*
-        OnClick we could either put the userId that was clicked 
-        or pass the id prop through the history.
-    */
-    const switchPage = (url, id) => {
-        //console.log("this is id: " + id)
-        history.push(
-            url + id
-        )
-    }
-
-    /* 
-        //a potential way we can use objects
-        const [state,setState] = React.useState({})
-        const changeState = () => {
-            setState(props.object);
-        }
-    */
-
     return (
         <div className={classes.root}>
-            <HomeContextConsumer>
-                {({ homeObject, deleteSurveyListener }) => (
+            <AnalyticsContextConsumer>
+                {({ analyticsObject }) => (
+                    <div>
                     <MaterialTable
-                        title="Surveys"
-                        columns={homeObject.columns}
-                        data={homeObject.surveys}
+                        title="Survey Responses"
+                        columns={analyticsObject.columns}
+                        data={analyticsObject.responses}
                         icons={tableIcons}
-                        actions={[
-                            {
-                                icon: () => <Edit />,
-                                tooltip: 'Edit Survey',
-                                onClick: (event, rowData) => switchPage('/create/', rowData.key),
-                            },
-                            {
-                                icon: () => <VisibilityIcon />,
-                                tooltip: 'View Survey Analytics',
-                                onClick: (event, rowData) => switchPage('/analytics/', rowData.key),
-                            },
-                            {
-                                icon: () => <DeleteOutline />,
-                                tooltip: 'Delete Survey',
-                                onClick: (event, rowData) => deleteSurveyListener(rowData.key)
-                            },
-                        ]}
-                        options={{
-                            //index of actions column in the table
-                            actionsColumnIndex: 4,
-                        }}
+                    //not sure if this is needed since we dont have anything here, unless
+                    //we want to single out each response. But probably not this iteration
+                    // **WE SHOULD GET THE AVERAGE STARS THO** 
+                    // actions={[
+                    //     {
+                    //         icon: () => <VisibilityIcon />,
+                    //         tooltip: 'View Details',
+                    //     },
+                    // ]}
+                    // options={{
+                    //     actionsColumnIndex: 4,
+                    // }}
                     />
+                    {/* {getArray(analyticsObject.responses)} */}
+                    </div>
                 )}
-            </HomeContextConsumer>
+            </AnalyticsContextConsumer>
         </div>
     );
 }
 
-export default SurveyTable;
+export default SurveyResultsTable;

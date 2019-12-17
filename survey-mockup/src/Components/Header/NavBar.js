@@ -11,7 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SurveyPage from '../Survey/SurveyCreationPage';
 import HomePage from '../Home/HomePage';
-import Container from '@material-ui/core/Container'
+import Container from '@material-ui/core/Container';
+import AnalyticsPage from '../Analytics/AnalyticsPage';
+
+import { Route, Link, Redirect } from 'react-router-dom';
 
 
 function TabPanel(props) {
@@ -56,41 +59,69 @@ export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
+  /*
+    We could also use the current pages url to evaluate which value to switch to
+  */
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const testHandler = () => {
+
+  }
+
+  const renderPage = (page) => {
+    return(
+      <Container maxWidth="lg">
+        <Container maxWidth="lg">
+        {page}
+        </Container>
+      </Container>
+    );
+  }
+
   return (
     <div className={classes.root}>
+      {/* <Redirect exact from="/" to="home" /> */}
       <AppBar position="static" color="primary">
-      <Container maxWidth="lg">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          variant="scrollable"
-          scrollButtons="on"
-          aria-label="scrollable force tabs example"
-        >
-          
-          <Tab label="Home" icon={<HomeIcon />} {...a11yProps(0)} />
-          <Tab label="Survey Creation" icon={<SurveyIcon />} {...a11yProps(1)} />
-          <Tab label="Analytics" icon={<AnalyticsIcon />} {...a11yProps(2)} />
-          
-        </Tabs>
-        </Container>
+        {/*<Container maxWidth="lg"> */}
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="on"
+            aria-label="scrollable force tabs example"
+          >
+            {/* Doing it this way reloads the page all the time 
+
+            <Tab label="Home" href="/home" icon={<HomeIcon />} {...a11yProps(0)} />   
+            
+            FIXME 
+              Fix the margins of each rendered page. It looks aweful
+            */}
+            <Tab label="Home" to="/" component={Link} icon={<HomeIcon />} {...a11yProps(0)} />
+            <Tab label="Survey Creation" to="/create" component={Link} icon={<SurveyIcon />} {...a11yProps(1)} disabled={true} />
+            <Tab label="Analytics" to="/analytics" component={Link} icon={<AnalyticsIcon />} {...a11yProps(2)} disabled={true}/>
+          </Tabs>
+        {/* </Container> */}
       </AppBar>
+
+      <Route path="/" exact component={HomePage}/>
+      <Route path="/create" component={SurveyPage}/>
+      <Route path="/analytics" component={AnalyticsPage}/>
+
       
-      <Container maxWidth="lg">
-      <TabPanel value={value} index={0}>
-        <HomePage/>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <SurveyPage/>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
+        {/* THIS DOESNT CHANGE THE ROUTES IN THE URL BAR so its basically doing nothing
         
-      </TabPanel>
-      </Container>
+        <TabPanel value={value} index={0} >
+          <Link to='/home' exact component={HomePage}></Link>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Link to='/create' exact component={() => <SurveyPage />}></Link>
+        </TabPanel>
+        <TabPanel value={value} index={2} >
+          <Link to='/analytics' exact component={() => <AnalyticsPage />}></Link>
+        </TabPanel> */}
     </div>
   );
 }

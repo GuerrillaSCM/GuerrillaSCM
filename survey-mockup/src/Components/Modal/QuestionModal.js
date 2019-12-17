@@ -32,7 +32,7 @@ export default function AddQuestionDialog(props) {
     const createNewId = require('uuid/v1');
 
     const itemId = () => {
-        console.log(props.questionId)
+        //console.log(props.questionId)
         if(props.questionId === undefined || props.questionId === null) {
             return createNewId();
         }
@@ -66,7 +66,7 @@ export default function AddQuestionDialog(props) {
     const getQuestionObject = () => {
         var id = itemId();
         return ({
-            questionText: document.getElementById("question_text").value,
+            prompt: document.getElementById("question_text").value,
             questionType: document.getElementById("question_type").value,
             questionId: id,
         });
@@ -89,7 +89,7 @@ export default function AddQuestionDialog(props) {
                         label="Question"
                         fullWidth
                         helperText={reqHelperText}
-                        defaultValue={props.questionText === undefined ? "" : props.questionText}
+                        defaultValue={props.prompt === undefined ? "" : props.prompt}
                         onChange={() => handleOnTextChange()}
                     />
                     </DialogContent>
@@ -100,13 +100,13 @@ export default function AddQuestionDialog(props) {
                     <Select
                         fullWidth
                         autoFocus
-                        defaultValue={props.questionType === undefined ? "star-rating" : props.questionType}
+                        defaultValue={props.questionType === undefined ? "StarRating" : props.questionType}
                         id='question_type_select'
                         inputProps={{
                             name: 'question_type',
                             id: 'question_type',
                         }}>
-                        <MenuItem value="star-rating">Star Rating</MenuItem>
+                        <MenuItem value="StarRating">Star Rating</MenuItem>
                         <MenuItem value="multiple-choice">Multiple Choice</MenuItem>
                         <MenuItem value="comments-box">Comments Box</MenuItem>
                     </Select>

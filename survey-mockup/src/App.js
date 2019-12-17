@@ -2,11 +2,14 @@
 import React from 'react';
 import './App.css';
 import Container from './Components/Container/Container'
+import { BrowserRouter } from 'react-router-dom'
 
 function App() {
   return (
     <div className="App">
-      <Container/>
+      <BrowserRouter basename='/'>
+        <Container/>
+      </BrowserRouter>
     </div>
   );
 }

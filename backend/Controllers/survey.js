@@ -17,7 +17,7 @@ exports.getAllSurveysGivenUserID = (req, res, next) => {
       owner: req.params.userID
     })
     .populate('questions') // only works if we pushed refs to survey.questions
-    .populate('trigger')
+    .populate('triggers')
     .exec(function (err, survey) {
       if (err) return res.send(err);
       res.send(survey);
@@ -30,7 +30,7 @@ exports.postSurveyGivenUserID = (req, res, next) => {
   body = req.body; //refer to req.body so its more clear in the rest of the function.
 
   delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
-  delete body['trigger'];
+  delete body['triggers'];
 
   survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
@@ -38,7 +38,7 @@ exports.postSurveyGivenUserID = (req, res, next) => {
   if (oldBody.questions != null) {
     oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
       survey.questions.push(Question(question));
-      console.log(survey.questions);
+      // console.log(survey.questions);
     });
     survey.questions.forEach(question => {
       question.save(function (err, result) {
@@ -46,13 +46,22 @@ exports.postSurveyGivenUserID = (req, res, next) => {
           return console.error(err);
         }
         console.log("saved question with id: " + question._id);
-      })
+      });
     });
   }
 
-  if (oldBody.trigger != null) {
-    oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
-      survey.trigger.push(Trigger(trigger));
+  if (oldBody.triggers != null) {
+    oldBody.triggers.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
+      survey.triggers.push(Trigger(trigger));
+      console.log(trigger);
+    });
+    survey.triggers.forEach(trigger => {
+      trigger.save(function (err, result) {
+        if (err) {
+          return console.error(err);
+        }
+        console.log("saved trigger with id: " + trigger._id);
+      });
     });
   }
 
@@ -72,7 +81,7 @@ exports.getSurveyGivenSurveyID = (req, res, next) => {
   Survey
     .findById(req.params.surveyID)
     .populate('questions') // only works if we pushed refs to survey.questions
-    .populate('trigger')
+    .populate('triggers')
     .exec(function (err, survey) {
       if (err) return res.send(err);
       res.send(survey);
@@ -85,7 +94,7 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
   Survey
     .findById(req.params.surveyID)
     .populate('questions') // only works if we pushed refs to survey.questions
-    .populate('trigger')
+    .populate('triggers')
     .exec(function (err, survey) {
       if (err) return res.send(err); //throw error
 
@@ -117,7 +126,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
   var body = req.body; //refer to req.body so its more clear in the rest of the function.
 
   delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
-  delete body['trigger'];
+  delete body['triggers'];
 
   var newSurvey = new Survey(body); //make a survey from the data that we 
   newSurvey._id = req.params.surveyID;
@@ -190,7 +199,7 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
   var body = req.body; //refer to req.body so its more clear in the rest of the function.
 
   delete body['questions']; //remove questions and triggers because mongoose is weird with saving arrays. "cannot convert type 'Array' to 'Array'" like wtf
-  delete body['trigger'];
+  delete body['triggers'];
 
   var survey = new Survey(body);
   survey._id = req.params.surveyID; //set the id to the one passed in the URL
