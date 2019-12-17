@@ -29,17 +29,19 @@ app.use('/api/survey/', surveyRoutes);
 app.use('/api/embed/', embeddedRoutes);
 app.use('/meme/', memeRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).send('<h1>404: Page Not Found<\h1.');
-});
+// app.use((req, res, next) => {
+//   res.status(404).send('<h1>404: Page Not Found<\h1.');
+// });
+
+app.use('/embed', express.static('public/embed'));
 
 const uri = "mongodb+srv://testing:MtfzES1ZWSOZnl13@guerrillascm-rk5d5.mongodb.net/GuerrillaSCM?retryWrites=true&w=majority";
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useFindAndModify: false
 }).then(result => {
-  app.listen(3000); //Listens for requests (asynchronous!)
-  console.log('API running on port: ' + 3000);
+  app.listen(3005); //Listens for requests (asynchronous!)
+  console.log('API running on port: ' + 3005);
 }).catch(err => {
   console.log(JSON.stringify(err));
 });
