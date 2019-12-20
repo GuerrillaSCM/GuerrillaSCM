@@ -211,23 +211,46 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
     if (error) return res.send(error); //send error
 
     var returnedSurvey = new Survey(returnedSurvey); //cast to a survey
+
+    /*
+      Creating a HashMap of old questionID's to the ObjectID's they correlate to.
+      Also defines a function for inserting new questions if there are more than the survey previously had
+    */
+
     var mapQuestionIDsToObjectIDs = new Map(); // create a hashmap for matching question IDs of the old survey to object IDs for update.
-    mapQuestionIDsToObjectIDs.set(survey.TEST, function () { //make sure to return a new ObjectId when an undefined value is asked for. (survey.TEST is not real, so it will be undefined)
-      return new ObjectId()
+
+    var maxID = 0; // We need to keep track of the current maximum ID number so that we can assign a new one if there is a new question that is added.
+    for (var i = 0; i < returnedSurvey.questions.length; i++) { //need to match each question ID from the old survey to the new one to get their objectID
+      var nextID = returnedSurvey.questions[i].questionID; //get the ID of the question that is next in the array.
+
+      if (nextID > maxID) { //update the maxID if the next ID is larger than the current max.
+        maxID = nextID;
+      }
+
+      mapQuestionIDsToObjectIDs.set(nextID, returnedSurvey.questions[i]._id); // update the ID of each question
+    }
+
+    mapQuestionIDsToObjectIDs.set("nextID", maxID + 1); // set the next ID in the list to be one larger than the maximum number that we found
+
+    mapQuestionIDsToObjectIDs.set(survey.SOMETHING_THAT_IS_NULL, function () { //make sure to return a new ObjectId when an undefined value is asked for. (survey.SOMETHING_THAT_IS_NULL is not real, so it will be undefined)
+      var newID = new ObjectId();
+      this.set(this.get("nextID"), newID); // Create a new questionID in the hashmap that is mapped to the next ID on the list.
+      return newID;
     });
 
-    for (var i = 0; i < returnedSurvey.questions.length; i++) { //need to match each question ID from the old survey to the new one to get their objectID
-      mapQuestionIDsToObjectIDs.set(returnedSurvey.questions[i].questionID, returnedSurvey.questions[i]._id); // update the ID of each question
-    }
     console.log(mapQuestionIDsToObjectIDs.size, " on Line 222");
 
-    // TODO:
-    // Cases: same number of questions, some updates
-    // less questions, some updates (need to remove questions)
-    // more questions, some updates (need to add new questions)
-    // all cases: need to update if they were updated, or make new if they are not in the list.
+    /*
+      Updating indivudual questions in the new survey coming in.
 
-    // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
+      TODO: Currently need to write functionality to handle the following identified cases.
+        same number of questions, some updates
+        less questions, some updates (need to remove questions)
+        more questions, some updates (need to add new questions)
+        all cases: need to update if they were updated, or make new if they are not in the list.
+        FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
+    */
+
     if (oldBody.questions != null) { // Only update questions if there are questions. 
       oldBody.questions.map(function (question) { // we need to push each question into the array so that it will get saved properly by mongoose
         question._id = mapQuestionIDsToObjectIDs.get(question.questionID); //set the ID to either the same one as the existing questionID, or create a new one.
@@ -252,13 +275,20 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
       });
     }
 
+    /*
+      Updating indivudual triggers in the new survey coming in.
+    */
+
     if (oldBody.trigger != null) {
       oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
         survey.trigger.push(Trigger(trigger));
       });
     }
 
-    // Save the survey
+     /*
+      Update the actual survey object in the database
+    */
+
     Survey.findByIdAndUpdate({
       _id: ObjectId(survey._id)
     }, survey, function (err, result) {
