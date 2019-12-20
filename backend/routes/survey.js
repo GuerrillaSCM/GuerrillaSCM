@@ -33,8 +33,9 @@ router.get('/survey/:surveyID', surveyController.getSurveyGivenSurveyID);
 
 /*
     Update survey
+    TODO: update the function responsible for updating the survey to allow for multiple updates on multiple triggers and questions.
 */
-router.put('/survey/:surveyID', surveyController.putSurveyGivenSurveyID);
+router.put('/survey/:surveyID', surveyController.putWholeSurveyGivenSurveyID);
 
 /*
     Update Survey
