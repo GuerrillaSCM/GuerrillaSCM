@@ -33,8 +33,13 @@ app.use((req, res, next) => {
   res.status(404).send('<h1>404: Page Not Found<\h1.');
 });
 
+// This is the uri of the database hosted in MongoDB atlas.
 const uri = "mongodb+srv://testing:MtfzES1ZWSOZnl13@guerrillascm-rk5d5.mongodb.net/GuerrillaSCM?retryWrites=true&w=majority";
-mongoose.connect(uri, {
+
+// uri for connecting to a local databse. This is helpful for debunning without having to wait for the slow MongoDB atlas page reloads
+const uriLocal = "mongodb://localhost:27017";
+
+mongoose.connect(uriLocal, {
   useNewUrlParser: true,
   useFindAndModify: false
 }).then(result => {
