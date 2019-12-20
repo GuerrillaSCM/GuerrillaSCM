@@ -53,7 +53,7 @@ exports.postSurveyGivenUserID = (req, res, next) => {
   if (oldBody.triggers != null) {
     oldBody.triggers.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
       survey.triggers.push(Trigger(trigger));
-      console.log(trigger);
+      // console.log(trigger);
     });
     survey.triggers.forEach(trigger => {
       trigger.save(function (err, result) {
@@ -72,7 +72,7 @@ exports.postSurveyGivenUserID = (req, res, next) => {
       return console.error(err);
     }
     res.send(result._id + ' Inserted into database')
-    console.log(result + " saved to Survey collection.");
+    console.log(result.title + " saved to Survey collection.");
   });
 
 }
@@ -102,12 +102,14 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
 
       if (survey.questions != null) { //remove all questions
         survey.questions.forEach(question => {
+          console.log("TestDeleteSurveyQuestion");
           Question.findByIdAndRemove(question._id)
         });
       }
 
       if (survey.trigger != null) { //remove all triggers
         survey.trigger.forEach(trigger => {
+          console.log("TestDeleteSurveyTrigger");
           Trigger.findByIdAndRemove(trigger._id)
         });
       }
@@ -119,6 +121,7 @@ exports.deleteSurveyGivenSurveyID = (req, res, next) => {
 }
 
 // function for the MVP which only deals with the possibility of 1 question and 1 trigger
+// Currently, this function is not getting run. putWholeSurveyGivenSurveyID is now the function responsible for updating the survey.
 exports.putSurveyGivenSurveyID = (req, res, next) => {
   if (!req.params.surveyID) return res.send("No Surey ID specified");
 
@@ -134,7 +137,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
   Survey.findById(newSurvey._id).populate('questions').populate('triggers').exec(function (error, returnedSurvey) {
     if (error) return res.send(error); //send error
 
-    console.log(returnedSurvey);
+    // console.log(returnedSurvey);
 
     if (!returnedSurvey) return res.send("Survey to update is not in the database");
 
@@ -143,7 +146,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
 
     // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
     if (oldBody.questions != null) { // Only update questions if there are questions. 
-      console.log("dsklflkadslfkjadslkjflaksdhflkahslkfdhlkjasdhlkjfhaskdhflkasdhlfhasdkljfhalksdjhflkasjhdlfkjahsdlkfhlkh");
+      // console.log("dsklflkadslfkjadslkjflaksdhflkahslkfdhlkjasdhlkjfhaskdhflkasdhlfhasdkljfhalksdjhflkasjhdlfkjahsdlkfhlkh");
       q = Question(oldBody.questions[0]); //make the question from the body into our schema Question
 
       if (returnedSurvey.questions.length > 0)
@@ -188,7 +191,6 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
         return console.error(err);
       }
       res.send(result._id + ' Inserted into database')
-      console.log("Survey updated");
     });
   });
 }
@@ -217,7 +219,7 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
     for (var i = 0; i < returnedSurvey.questions.length; i++) { //need to match each question ID from the old survey to the new one to get their objectID
       mapQuestionIDsToObjectIDs.set(returnedSurvey.questions[i].questionID, returnedSurvey.questions[i]._id); // update the ID of each question
     }
-    console.log(mapQuestionIDsToObjectIDs.size);
+    console.log(mapQuestionIDsToObjectIDs.size, " on Line 222");
 
     // TODO:
     // Cases: same number of questions, some updates
@@ -243,7 +245,7 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
           upsert: true // Make this update into an upsert
         }, function (err, result) {
           if (err) {
-            return console.error(err);
+            return console.error(err, " on Line 248");
           }
           // console.log(result);
         });
@@ -257,12 +259,14 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
     }
 
     // Save the survey
-    survey.save(function (err, result) {
+    Survey.findByIdAndUpdate({
+      _id: ObjectId(survey._id)
+    }, survey, function (err, result) {
       if (err) {
         res.send('Error updating survey with title ' + survey.title)
-        return console.error(err);
+        return console.error(err, " on Line 265");
       }
-      res.send(result._id + ' Inserted into database')
+      res.send(result._id + ' Updated in the database')
       // console.log(result + " saved to Survey collection.");
     });
   });
