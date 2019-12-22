@@ -40,7 +40,7 @@ mongoose.connect(uri, {
   useNewUrlParser: true,
   useFindAndModify: false
 }).then(result => {
-  app.listen(3005); //Listens for requests (asynchronous!)
+  app.listen(process.env.PORT || 3005); //Listens for requests (asynchronous!)
   console.log('API running on port: ' + 3005);
 }).catch(err => {
   console.log(JSON.stringify(err));
