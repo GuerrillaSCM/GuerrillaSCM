@@ -108,7 +108,7 @@ export default function AddQuestionDialog(props) {
                         }}>
                         <MenuItem value="StarRating">Star Rating</MenuItem>
                         <MenuItem value="multiple-choice">Multiple Choice</MenuItem>
-                        <MenuItem value="comments-box">Comments Box</MenuItem>
+                        <MenuItem value="CommentsBox">Comments Box</MenuItem>
                     </Select>
                     </DialogContent>
                 <DialogActions>
