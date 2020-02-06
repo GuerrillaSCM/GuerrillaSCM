@@ -8,6 +8,11 @@ import {HomeContextProvider} from '../Context/HomeContextClass'
 /* 
     Make requests here?? Need userId, and surveyIds
 */
+
+/*
+    TODO: Maybe convert this to a class then use the component did mount feature
+          to call a fetch user, or survey to start the program....
+*/
 const homePage = () => {
     return(
         <div>

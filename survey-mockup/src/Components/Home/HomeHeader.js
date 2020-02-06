@@ -10,6 +10,10 @@ import { HomeContextConsumer } from '../Context/HomeContextClass'
 import {Link} from 'react-router-dom'
 import LOGO from '../Assets/cap_logo.png'
 
+//redux
+import { useDispatch } from "react-redux";
+import * as actionTypes from '../../store/actions/actions'
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,6 +44,8 @@ const useStyles = makeStyles(theme => ({
 function HomeHeader(props) {
 
     const classes = useStyles();
+
+    const dispatch = useDispatch();
 
     //get all surveys that say is published true...
     const getAllActiveSurveys = (surveys) => {
@@ -73,7 +79,8 @@ function HomeHeader(props) {
                         <Divider className={classes.distance} />
                         <Typography variant="overline" gutterBottom>
                         </Typography>
-                        <Button color="primary" variant="contained" to="/create" component={Link}>
+                        <Button color="primary" variant="contained" to="/create" component={Link} 
+                        onClick={() => dispatch(actionTypes.switchPage(1))}>
                             Create A New Survey
                         </Button>
                         <div className={classes.distance}></div>

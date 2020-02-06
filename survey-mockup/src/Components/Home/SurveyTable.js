@@ -25,6 +25,10 @@ import { Link } from 'react-router-dom'
 import AnalyticsPage from '../Analytics/AnalyticsPage'
 import { useHistory } from "react-router-dom";
 
+//redux
+import * as actionTypes from '../../store/actions/actions';
+import { useDispatch } from "react-redux";
+
 const tableIcons = {
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
@@ -63,16 +67,20 @@ function SurveyTable() {
 
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+
 
     /*
         OnClick we could either put the userId that was clicked 
         or pass the id prop through the history.
     */
-    const switchPage = (url, id) => {
+    const switchPage = (url, id, page) => {
         //console.log("this is id: " + id)
         history.push(
             url + id
         )
+        //change state of currentPage
+        dispatch(actionTypes.switchPage(page));
     }
 
     /* 
@@ -82,6 +90,21 @@ function SurveyTable() {
             setState(props.object);
         }
     */
+
+    /*
+        
+    */
+//    const mapStateToProps = state => {
+//         return {
+//             page: state.page_index,
+//         }
+//     };
+
+//     const mapDispatchToProps = dispatch => {
+//         return {
+//             onPageSwitch: (val) => dispatch(actionTypes.switchPage(val))
+//         }
+//     }
 
     return (
         <div className={classes.root}>
@@ -96,17 +119,17 @@ function SurveyTable() {
                             {
                                 icon: () => <Edit />,
                                 tooltip: 'Edit Survey',
-                                onClick: (event, rowData) => switchPage('/create/', rowData.key),
+                                onClick: (event, rowData) => switchPage('/create/', rowData.key,1),
                             },
                             {
                                 icon: () => <VisibilityIcon />,
                                 tooltip: 'View Survey Analytics',
-                                onClick: (event, rowData) => switchPage('/analytics/', rowData.key),
+                                onClick: (event, rowData) => switchPage('/analytics/', rowData.key,2),
                             },
                             {
                                 icon: () => <DeleteOutline />,
                                 tooltip: 'Delete Survey',
-                                onClick: (event, rowData) => deleteSurveyListener(rowData.key)
+                                onClick: (event, rowData) => deleteSurveyListener(rowData.key,0)
                             },
                         ]}
                         options={{
