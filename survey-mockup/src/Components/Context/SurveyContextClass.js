@@ -71,6 +71,7 @@ class SurveyContextProvider extends Component {
         to update the current state.
     */
     surveyObjectChangedHandler = (surveyObjectInput) => {
+        console.log("This changed!");
         this.setState({ surveyObjectInput })
     }
 
@@ -123,9 +124,10 @@ class SurveyContextProvider extends Component {
         //console.log(this.state);
         let survId = "";
         if(this.state.surveyId === undefined) {
+            //right now this call only handles surveys from testpacito
             ApiCall.postSurvey(this.state, "TestPacito").then(response => {
                 survId = response.data.split(" ")[0];
-                window.location.href = "http://localhost:3000/create/"+survId;
+                window.location.pathname = "/create/"+survId;
             })
         }
         else {

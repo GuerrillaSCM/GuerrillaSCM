@@ -1,11 +1,3 @@
-/* Contains all the buttons with all the functionality
-This might be a beefy js file if we decide to put all of 
-the button handlers here. */
-
-/* 
-  FIXME: surveyName textfield variant="outlined" is not working! 
-         Using default textfield right now
-*/
 
 
 import React from 'react';
@@ -105,8 +97,9 @@ export default function SurveyActions(props) {
             fullWidth
             label="Survey Name"
             helperText={reqHelperText}
-            placeholder = {survey.title}
-            defaultValue={survey.title === undefined ? "": survey.title}
+            //placeholder = {survey.title}
+            value={survey.title === undefined ? "": survey.title}
+            //defaultValue={survey.title === undefined ? "": survey.title} im so fucking stupid
             onChange={() => surveyChangeListener(
               survey.title = document.getElementById("surveyName").value
             )}
