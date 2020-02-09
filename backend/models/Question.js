@@ -20,4 +20,4 @@ var QuestionSchema = mongoose.Schema({
 });
 
 //Compile schema to model and export it
-module.exports = mongoose.model('Question', QuestionSchema, 'Question');
+module.exports = QuestionSchema;
