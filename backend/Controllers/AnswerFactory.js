@@ -1,30 +1,12 @@
-const StarAnswer = require('../models/StarAnswer'); //CHANGE THIS IN THE FUTURE. THIS IS NOT WHAT WE WANT, WANT IT TO BE ANSWER INSTEAD
+/* AnswerFactory
+this file acts like a factory for creating answertypes for the database.
+When new answer types are added, they will need to have their schemas compiled to a model here for the app to understand how to create that new instance
+*/
+const mongoose = require('mongoose');
+const AnswerSchema = require('../models/Answer');
+const StarAnswerSchema = require('../models/StarAnswer');
 
-class AnswerFactory {
-    constructor(answerObject) {
-        var answerType = answerObject.answerType;
-        var factory = registeredAnswerFactories[answerObject.answerType];
-        console.log(answerType);
-        console.log(answerObject);
-        console.log(factory);
-        return factory(answerObject);
-    }
-};
+var Answer = mongoose.model('Answer', AnswerSchema);
+var StarAnswer = Answer.discriminator('StarRating', StarAnswerSchema);
 
-// array of different constructors for the different answer types
-let registeredAnswerFactories = {};
-registeredAnswerFactories['StarRating'] = (answerObject) => {
-    return new StarAnswer(answerObject)
-};
-
-
-// NOT YET IMPLEMENTED
-// registeredAnswerFactories['CommentBox'] = (answerObject) => {
-//     return new CommentAnswer(answerObject)
-// };
-
-// registeredAnswerFactories['MultipleChoice'] = (answerObject) => {
-//     return new MultipleChoiceAnswer(answerObject)
-// };
-
-module.exports = AnswerFactory; //export the factory for use in other modules
+module.exports = Answer; //export the root model, this can be used to save all Answers, as well as identify them

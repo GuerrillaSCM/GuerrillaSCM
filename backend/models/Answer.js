@@ -1,7 +1,12 @@
-const mongoose = require('mongoose');
-// const Question = require('./Question').schema; // Might want to just include a reference to the question in the collection.
+/*
+ THis file is the description of the abstract type of Answer
+ All the other kinds of answers 'inherit' from this file
 
-var db = mongoose.connection;
+ New types need to be added to the answerFactor.js file to be compiled as models with discriminators included.
+ look at AnswerFactory.js for an example of what this looks like
+*/
+
+const mongoose = require('mongoose');
 
 var options = {
   collection: 'Answer', //sepcify that all answers are saved in the answer collection
@@ -20,15 +25,5 @@ var AnswerSchema = new mongoose.Schema({
   }, // ID of the question it is responding to
 }, options);
 
-var Answer = mongoose.model('Answer', AnswerSchema);
-
-var StarAnswer = Answer.discriminator('StarRating',
-  new mongoose.Schema({ //integer from 1-5 for the number of stars -- we probably want to customize this in the future to be out of however many stars we want
-    stars: {
-      type: Number,
-      default: null
-    }
-  }));
-
-module.exports = Answer; //compile to a model for the Answer collection in the database
-// This should be scoped to the entire environment after creation, bound to the current mongoose instance. But this could be wrong
+module.exports = AnswerSchema; //compile to a model for the Answer collection in the database
+// This should be scoped to the entire environment after creation, bound to the current mongoose instance.
