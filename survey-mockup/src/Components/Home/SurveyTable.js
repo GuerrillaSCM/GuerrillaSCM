@@ -83,6 +83,15 @@ function SurveyTable() {
         dispatch(actionTypes.switchPage(page));
     }
 
+    // const confirmDelete = (deleteRow, rowId) => {
+    //     if(confirm("Delete this survey?")) {
+    //         deleteRow(rowId);
+    //     }
+    //     else {
+
+    //     }
+    // }
+
     /* 
         //a potential way we can use objects
         const [state,setState] = React.useState({})
@@ -129,7 +138,10 @@ function SurveyTable() {
                             {
                                 icon: () => <DeleteOutline />,
                                 tooltip: 'Delete Survey',
-                                onClick: (event, rowData) => deleteSurveyListener(rowData.key,0)
+                                onClick: (event, rowData) => {
+                                    if (window.confirm(`Delete "${rowData.title}" survey?`))
+                                        deleteSurveyListener(rowData.key)
+                                }
                             },
                         ]}
                         options={{
