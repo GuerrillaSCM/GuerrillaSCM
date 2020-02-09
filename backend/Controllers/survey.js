@@ -76,7 +76,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
       return console.error(err);
     } else {
       res.send(result._id + ' Inserted into database')
-      console.log(result + " saved to Survey collection.");
+      console.log(result._id + " saved to Survey collection.");
     }
   });
 
@@ -145,7 +145,7 @@ exports.putSurveyGivenSurveyID = async (req, res, next) => {
   Survey.findById(newSurvey._id).populate('questions').populate('triggers').exec(async (error, returnedSurvey) => {
     if (error) return res.send(error); //send error
 
-    console.log(returnedSurvey);
+    // console.log(returnedSurvey);
 
     if (!returnedSurvey) return res.send("Survey to update is not in the database");
 
@@ -154,7 +154,6 @@ exports.putSurveyGivenSurveyID = async (req, res, next) => {
 
     // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
     if (oldBody.questions != null) { // Only update questions if there are questions. 
-      console.log("dsklflkadslfkjadslkjflaksdhflkahslkfdhlkjasdhlkjfhaskdhflkasdhlfhasdkljfhalksdjhflkasjhdlfkjahsdlkfhlkh");
       q = await Question.create(oldBody.questions[0]); //make the question from the body into our schema Question
 
       if (returnedSurvey.questions.length > 0)
@@ -239,14 +238,14 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
 
     // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
     if (oldBody.questions != null) { // Only update questions if there are questions. 
-      oldBody.questions.map(function (question) { // we need to push each question into the array so that it will get saved properly by mongoose
+      oldBody.questions.map(async (question) => { // we need to push each question into the array so that it will get saved properly by mongoose
         question._id = mapQuestionIDsToObjectIDs.get(question.questionID); //set the ID to either the same one as the existing questionID, or create a new one.
-        survey.questions.push(Question(question));
+        survey.questions.push(await (Question.create(question)));
       });
 
       // update questions that exist, or add new ones.
-      survey.questions.forEach(question => {
-        q = Question(question);
+      survey.questions.forEach(async (question) => {
+        q = await Question.create(question);
 
         Question.findOneAndUpdate({
           _id: ObjectId(q._id)
@@ -264,7 +263,7 @@ exports.putWholeSurveyGivenSurveyID = (req, res, next) => {
 
     if (oldBody.trigger != null) {
       oldBody.trigger.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
-        survey.trigger.push(Trigger(trigger));
+        survey.trigger.push(await (Trigger.create(trigger)));
       });
     }
 
