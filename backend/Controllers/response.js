@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Response = require('../models/SurveyResponse');
 const ObjectId = require('mongoose').Types.ObjectId;
 const Answer = require('../models/Answer'); //CHANGE THIS IN THE FUTURE. THIS IS NOT WHAT WE WANT, WANT IT TO BE ANSWER INSTEAD
+// const AnswerFactory = require('./AnswerFactory');
 
 /*
   Response ID controllers
@@ -32,28 +33,35 @@ exports.postResponseGivenSurveyID = (req, res, next) => {
   surveyResponse = Response(body);
   surveyResponse.surveyID = ObjectId(req.params.surveyID);
 
-  if (oldBody.answers != null) {
+  if (oldBody.answers != null) { // if there are any answers in the response to add 
     oldBody.answers.forEach(answer => {
-      surveyResponse.answers.push(Answer(answer));
-      console.log(answer);
-    });
-    surveyResponse.answers.forEach(answer => {
-      answer.save(function (err, result) {
-        if (err) {
-          return console.error(err);
-        }
-        console.log("saved question with id: " + answer._id);
-      })
+      // surveyResponse.answers.push(new AnswerFactory(answer));
+      Answer.create(answer).then((newAnswer) => {
+        surveyResponse.answers.push(newAnswer);
+        console.log(newAnswer);
+      }).catch((error) => {
+        console.log(error);
+      }).then(() => {
+        surveyResponse.answers.forEach(answer => {
+          answer.save((err, result) => {
+            if (err) {
+              return console.error(err);
+            }
+            console.log(result);
+            console.log("lkjdhlgkahdfjghxkodjghlksdfhghdsfhisdlkhigfukfdjcbn,jfxhgkldfxjopgihfhfdlkbhdflkjghflshgfkdhbsdufyhgoisudfogsdfpkghsldfkhgfdkuhgkdfhgsdfoiu");
+            console.log("saved question with id: " + answer._id);
+          });
+        });
+        surveyResponse.save(function (err, result) {
+          if (err) {
+            return console.error(err);
+          }
+          res.send(surveyResponse.surveyID + ' Inserted into database')
+          console.log(surveyResponse.surveyID + " saved to Survey collection.");
+        });
+      });
     });
   }
-
-  surveyResponse.save(function (err, result) {
-    if (err) {
-      return console.error(err);
-    }
-    res.send(surveyResponse.surveyID + ' Inserted into database')
-    console.log(surveyResponse.surveyID + " saved to Survey collection.");
-  });
 }
 
 /*
@@ -66,13 +74,14 @@ exports.postResponseGivenResponseID = (req, res, next) => {
   var answers = JSON.parse(JSON.stringify(surveyResponse.answers));
 
   if (answers != null) {
-    answers.forEach(answer => { // we need to push each question into the array so that it will get saved properly by mongoose
-      var a = Answer(answer);
-      a.save(function (err, result) {
-        if (err) {
-          return console.error(err);
-        }
-        console.log("answer saved to Survey collection.");
+    answers.forEach((answer) => { // we need to push each question into the array so that it will get saved properly by mongoose
+      Answer.create(answer).then((a) => {
+        a.save((err, result) => {
+          if (err) {
+            return console.error(err);
+          }
+          console.log("answer saved to Survey collection.");
+        });
       });
     });
   }
