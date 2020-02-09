@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Question = require('./questions/Question.js').schema;
-const Trigger = require('./triggers/Trigger.js').schema;
+const Question = require('./QuestionFactory.js').schema;
+const Trigger = require('./TriggerFactory.js').schema;
 
 // define Schema
 class SurveySchema extends mongoose.Schema {

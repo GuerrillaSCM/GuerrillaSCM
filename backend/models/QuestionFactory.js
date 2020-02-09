@@ -7,6 +7,6 @@ const QuestionSchema = require('./questions/Question');
 const StarQuestionSchema = require('./questions/StarQuestion');
 
 var Question = mongoose.model('Question', QuestionSchema);
-var StarQuestion = Answer.discriminator('StarRating', StarQuestionSchema);
+var StarQuestion = Question.discriminator('StarQuestion', StarQuestionSchema);
 
 module.exports = Question; //export the root model, this can be used to save all Answers, as well as identify them

@@ -7,6 +7,6 @@ const TriggerSchema = require('./triggers/Trigger');
 const TimerTriggerSchema = require('./triggers/TimerTrigger');
 
 var Trigger = mongoose.model('Trigger', TriggerSchema);
-var TimerTrigger = Answer.discriminator('TimerRating', TimerTriggerSchema);
+var TimerTrigger = Trigger.discriminator('TimerRating', TimerTriggerSchema);
 
 module.exports = Trigger; //export the root model, this can be used to save all Answers, as well as identify them
