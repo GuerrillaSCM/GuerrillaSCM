@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 const Survey = require('../models/Survey');
-const Question = require('../models/questions/Question');
-const Trigger = require('../models/triggers/Trigger');
+const Question = require('../models/QuestionFactory');
+const Trigger = require('../models/TriggerFactory');
 
 
 exports.getAllSurveysGivenUserID = (req, res, next) => {
@@ -25,7 +25,7 @@ exports.getAllSurveysGivenUserID = (req, res, next) => {
   // res.send('this is the GET /user/:userID ')
 }
 
-exports.postSurveyGivenUserID = (req, res, next) => {
+exports.postSurveyGivenUserID = async (req, res, next) => {
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
   body = req.body; //refer to req.body so its more clear in the rest of the function.
 
@@ -35,44 +35,47 @@ exports.postSurveyGivenUserID = (req, res, next) => {
   survey = new Survey(body);
   survey.owner = req.params.userID; //setting the ownerID from the URL parameter
 
-  if (oldBody.questions != null) {
-    oldBody.questions.forEach(question => { // we need to push each question into the array so that it will get saved properly by mongoose
-      survey.questions.push(Question(question));
-      // console.log(survey.questions);
-    });
-    survey.questions.forEach(question => {
-      question.save(function (err, result) {
-        if (err) {
-          return console.error(err);
-        }
-        console.log("saved question with id: " + question._id);
-      });
-    });
-  }
+  var promises = [] //create an array to store the promises we want to wait on. we are going to add all the question and trigger add commands here
 
-  if (oldBody.triggers != null) {
-    oldBody.triggers.forEach(trigger => { // we need to push each question into the array so that it will get saved properly by mongoose
-      survey.triggers.push(Trigger(trigger));
-      console.log(trigger);
+  promises.push(oldBody.questions.map(async (question) => { //go through each question that needs to be saved. async function executes them all in parallel. waits until they all complete
+    newQuestion = await Question.create(question) //transform the question into a document based on the question schema models, 
+    survey.questions.push(newQuestion); //add that question to the array that we will save to the database
+    return newQuestion.save((err, result) => { //save the question, and wait until the operation completes to end this function call
+      if (err) {
+        return console.error(err);
+      } else {
+        return console.log("saved question with id: " + newQuestion._id);
+      }
     });
-    survey.triggers.forEach(trigger => {
-      trigger.save(function (err, result) {
-        if (err) {
-          return console.error(err);
-        }
-        console.log("saved trigger with id: " + trigger._id);
-      });
+  }))
+
+  promises.push(oldBody.triggers.map(async (trigger) => { //go through each trigger that needs to be saved. async function executes them all in parallel. waits until they all complete
+    newTrigger = await Trigger.create(trigger) //transform the trigger into a document based on the trigger schema models, 
+    survey.triggers.push(newTrigger); //add that trigger to the array that we will save to the database
+    return newTrigger.save((err, result) => { //save the trigger, and wait until the operation completes to end this function call
+      if (err) {
+        return console.error(err);
+      } else {
+        return console.log("saved trigger with id: " + newTrigger._id);
+      }
     });
-  }
+  }))
+
+  await Promise.all(promises.map(async (promiseArray) => { //wait for all the arrays of promises to resolve
+    await Promise.all(promiseArray.map(async (promise) => { //wait for all the promises in the array to resolve
+      await promise.then()
+    }))
+  }));
 
   // Save the survey
-  survey.save(function (err, result) {
+  survey.save((err, result) => {
     if (err) {
       res.send('Error inserting survey with title ' + survey.title)
       return console.error(err);
+    } else {
+      res.send(result._id + ' Inserted into database')
+      console.log(result + " saved to Survey collection.");
     }
-    res.send(result._id + ' Inserted into database')
-    console.log(result + " saved to Survey collection.");
   });
 
 }
