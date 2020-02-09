@@ -8,6 +8,9 @@ Accept props to fill up the survey */
     | Icon  | Question #       | Edit      |
     | Icon  | Question Text    | Button    |
     Potentially get all the information after adding question
+
+    TODO!!!
+    Change icon to star or a multiple choice icon or comment box
 */
 import React from 'react';
 

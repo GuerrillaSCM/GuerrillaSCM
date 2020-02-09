@@ -21,8 +21,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { HomeContextConsumer } from '../Context/HomeContextClass';
 
 //Test 
-import { Link } from 'react-router-dom'
-import AnalyticsPage from '../Analytics/AnalyticsPage'
 import { useHistory } from "react-router-dom";
 
 //redux

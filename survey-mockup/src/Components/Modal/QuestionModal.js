@@ -81,7 +81,6 @@ export default function AddQuestionDialog(props) {
     const changeValue = (val) => {
         setCurrentval(val);
     }
-    
 
     return (
         <div className="">
