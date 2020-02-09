@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const Schema = require('mongoose').Schema;
 
-var TriggerSchema = mongoose.Schema({
+module.exports = Schema({ // compile schema to model and export.
   // _id: mongoose.Schema.Types.ObjectId,
   triggerType: {
     type: String,
@@ -14,6 +14,3 @@ var TriggerSchema = mongoose.Schema({
   collection: 'Question',
   discriminatorKey: '_type'
 });
-
-// compile schema to model and export.
-module.exports = mongoose.model('Trigger', TriggerSchema, 'Trigger');

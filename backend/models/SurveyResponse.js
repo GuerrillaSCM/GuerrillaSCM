@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Answer = require('./Answer.js').schema;
+const Answer = require('./answers/Answer.js').schema;
 
 class SurveyResponseSchema extends mongoose.Schema {
   constructor(obj, options) {

@@ -9,7 +9,7 @@
 const mongoose = require('mongoose');
 const Response = require('../models/SurveyResponse');
 const ObjectId = require('mongoose').Types.ObjectId;
-const Answer = require('./AnswerFactory'); //This might be ghetto, we are grabbing an object from the controllers as if it is a model. It is effectively all the Anwser Models all compiled together
+const Answer = require('../models/AnswerFactory'); //This might be ghetto, we are grabbing an object from the controllers as if it is a model. It is effectively all the Anwser Models all compiled together
 
 /*
   Response ID controllers

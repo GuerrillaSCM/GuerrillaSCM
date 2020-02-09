@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const Schema = require('mongoose').Schema;
 
-var QuestionSchema = mongoose.Schema({
+module.exports = Schema({ //Compile schema to model and export
   // _id: mongoose.Schema.Types.ObjectId,
   questionType: {
     type: String,
@@ -18,6 +18,3 @@ var QuestionSchema = mongoose.Schema({
   collection: 'Question',
   discriminatorKey: '_type'
 });
-
-//Compile schema to model and export it
-module.exports = QuestionSchema;

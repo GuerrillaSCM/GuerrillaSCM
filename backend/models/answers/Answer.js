@@ -6,14 +6,11 @@
  look at AnswerFactory.js for an example of what this looks like
 */
 
-const mongoose = require('mongoose');
+const Schema = require('mongoose').Schema;
 
-var options = {
-  collection: 'Answer', //sepcify that all answers are saved in the answer collection
-  discriminatorKey: 'answerType' // we define the discriminator to be the answerType in the model
-}
-
-var AnswerSchema = new mongoose.Schema({
+//compile to a model for the Answer collection in the database
+// This should be scoped to the entire environment after creation, bound to the current mongoose instance.
+module.exports = AnswerSchema = new Schema({
   // _id: mongoose.Schema.Types.ObjectId,
   answerType: {
     type: String,
@@ -23,7 +20,7 @@ var AnswerSchema = new mongoose.Schema({
     type: Number,
     default: 0
   }, // ID of the question it is responding to
-}, options);
-
-module.exports = AnswerSchema; //compile to a model for the Answer collection in the database
-// This should be scoped to the entire environment after creation, bound to the current mongoose instance.
+}, {
+  collection: 'Answer', //sepcify that all answers are saved in the answer collection
+  discriminatorKey: 'answerType' // we define the discriminator to be the answerType in the model
+});

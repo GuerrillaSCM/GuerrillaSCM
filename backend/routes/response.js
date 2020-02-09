@@ -4,11 +4,6 @@
 
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-const Response = require('../models/SurveyResponse');
-const Survey = require('../models/Survey');
-const Answer = require('../models/Answer')
 
 const responseController = require('../Controllers/response');
 

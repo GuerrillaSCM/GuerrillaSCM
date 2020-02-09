@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 const Survey = require('../models/Survey');
-const Question = require('../models/Question');
-const Trigger = require('../models/Trigger');
+const Question = require('../models/questions/Question');
+const Trigger = require('../models/triggers/Trigger');
 
 
 exports.getAllSurveysGivenUserID = (req, res, next) => {

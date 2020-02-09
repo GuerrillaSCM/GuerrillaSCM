@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Survey = require('../models/Survey');
-const Question = require('../models/Question');
+const Question = require('../models/questions/Question');
 
 //Example get function that tests using the schema
 router.get(':test', function (req, res) {
