@@ -37,6 +37,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
 
   var promises = [] //create an array to store the promises we want to wait on. we are going to add all the question and trigger add commands here
 
+  //save all the questions
   promises.push(oldBody.questions.map(async (question) => { //go through each question that needs to be saved. async function executes them all in parallel. waits until they all complete
     newQuestion = await Question.create(question) //transform the question into a document based on the question schema models, 
     survey.questions.push(newQuestion); //add that question to the array that we will save to the database
@@ -49,6 +50,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
     });
   }))
 
+  // save all the triggers
   promises.push(oldBody.triggers.map(async (trigger) => { //go through each trigger that needs to be saved. async function executes them all in parallel. waits until they all complete
     newTrigger = await Trigger.create(trigger) //transform the trigger into a document based on the trigger schema models, 
     survey.triggers.push(newTrigger); //add that trigger to the array that we will save to the database
@@ -80,49 +82,55 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
 
 }
 
+// get a single survey if you have the survey ID
 exports.getSurveyGivenSurveyID = (req, res, next) => {
   Survey
     .findById(req.params.surveyID)
     .populate('questions') // only works if we pushed refs to survey.questions
     .populate('triggers')
     .exec(function (err, survey) {
-      if (err) return res.send(err);
-      res.send(survey);
+      if (err) {
+        return res.send(err);
+      } else {
+        res.send(survey);
+      }
     });
-
-  // res.send('this is the GET /survey/:surveyID ')
 }
 
+// delete a survey if you have a survey ID
 exports.deleteSurveyGivenSurveyID = (req, res, next) => {
   Survey
     .findById(req.params.surveyID)
     .populate('questions') // only works if we pushed refs to survey.questions
     .populate('triggers')
-    .exec(function (err, survey) {
+    .exec((err, survey) => {
       if (err) return res.send(err); //throw error
 
       if (survey == null) return res.send("Survey already deleted");
 
-      if (survey.questions != null) { //remove all questions
+      //remove all questions
+      if (survey.questions != null) {
         survey.questions.forEach(question => {
           Question.findByIdAndRemove(question._id)
         });
       }
 
-      if (survey.trigger != null) { //remove all triggers
+      //remove all triggers
+      if (survey.trigger != null) {
         survey.trigger.forEach(trigger => {
           Trigger.findByIdAndRemove(trigger._id)
         });
       }
 
-      Survey.findByIdAndRemove(req.params.surveyID, function (err, result) {
+      //remove the actual survey
+      Survey.findByIdAndRemove(req.params.surveyID, (err, result) => {
         res.send('Survey removed');
       }); //remove survey
     });
 }
 
 // function for the MVP which only deals with the possibility of 1 question and 1 trigger
-exports.putSurveyGivenSurveyID = (req, res, next) => {
+exports.putSurveyGivenSurveyID = async (req, res, next) => {
   if (!req.params.surveyID) return res.send("No Surey ID specified");
 
   var oldBody = JSON.parse(JSON.stringify(req.body)); //ghetto deep copy
@@ -134,7 +142,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
   var newSurvey = new Survey(body); //make a survey from the data that we 
   newSurvey._id = req.params.surveyID;
 
-  Survey.findById(newSurvey._id).populate('questions').populate('triggers').exec(function (error, returnedSurvey) {
+  Survey.findById(newSurvey._id).populate('questions').populate('triggers').exec(async (error, returnedSurvey) => {
     if (error) return res.send(error); //send error
 
     console.log(returnedSurvey);
@@ -147,7 +155,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
     // FIXME: if a survey with no questions is passed, when the original survey has questions, this will not remove them.
     if (oldBody.questions != null) { // Only update questions if there are questions. 
       console.log("dsklflkadslfkjadslkjflaksdhflkahslkfdhlkjasdhlkjfhaskdhflkasdhlfhasdkljfhalksdjhflkasjhdlfkjahsdlkfhlkh");
-      q = Question(oldBody.questions[0]); //make the question from the body into our schema Question
+      q = await Question.create(oldBody.questions[0]); //make the question from the body into our schema Question
 
       if (returnedSurvey.questions.length > 0)
         q._id = returnedSurvey.questions[0]._id; //set the objectID of the new survey to the same as the one from the old survey so it will get updated.
@@ -165,7 +173,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
     }
 
     if (oldBody.triggers != null) {
-      t = Trigger(oldBody.triggers[0]); //make the trigger from the body into our schema Question
+      t = await Trigger.create(oldBody.triggers[0]); //make the trigger from the body into our schema Question
 
       if (returnedSurvey.triggers.length > 0)
         t._id = returnedSurvey.triggers[0]._id; //set the objectID of the new survey to the same as the one from the old survey so it will get updated.
@@ -177,7 +185,7 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
       }, t, {
         new: true,
         upsert: true // Make this update into an upsert (update or insert)
-      }, function (err, result) {
+      }, (err, result) => {
         if (err) return console.error(err);
       });
     }
@@ -187,11 +195,12 @@ exports.putSurveyGivenSurveyID = (req, res, next) => {
       _id: ObjectId(newSurvey._id) //search based on object ID, for updating multiple questions, we will need to do some work to make sure the new and old question ID's objectId's matchup first.
     }, newSurvey, function (err, result) {
       if (err) {
-        res.send('Error updating survey with title ' + newSurvey.title)
-        return console.error(err);
+        console.error(err);
+        return res.send('Error updating survey with title ' + newSurvey.title)
+      } else {
+        console.log("Survey updated");
+        return res.send(result._id + ' Inserted into database')
       }
-      res.send(result._id + ' Inserted into database')
-      console.log("Survey updated");
     });
   });
 }
