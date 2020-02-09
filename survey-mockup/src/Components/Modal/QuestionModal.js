@@ -20,12 +20,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import QuestionTypeFactory from './questionTypesModal/questionTypeFactory'
 
 export default function AddQuestionDialog(props) {
 
     const [reqHelperText, setReqHelperText] = React.useState("");
 
     const [isError, setIsError] = React.useState(false);
+
+    const [currentVal, setCurrentval] = React.useState("StarRating");
 
     const { open, onClose } = props
 
@@ -45,8 +48,10 @@ export default function AddQuestionDialog(props) {
         onClose();
         setReqHelperText("");
         setIsError(false);
+        setCurrentval("StarRating")
     };
 
+    //gets called when the add button is pressed
     const handleAdd = () => {
         if(document.getElementById("question_text").value === "") {
             setReqHelperText("Required*");
@@ -63,6 +68,7 @@ export default function AddQuestionDialog(props) {
         setIsError(false);
     }
 
+    //returns the question object we want to add
     const getQuestionObject = () => {
         var id = itemId();
         return ({
@@ -71,6 +77,11 @@ export default function AddQuestionDialog(props) {
             questionId: id,
         });
     }
+
+    const changeValue = (val) => {
+        setCurrentval(val);
+    }
+    
 
     return (
         <div className="">
@@ -105,11 +116,16 @@ export default function AddQuestionDialog(props) {
                         inputProps={{
                             name: 'question_type',
                             id: 'question_type',
-                        }}>
+                        }}
+                        onClick={(e) => changeValue(e.target.value)}
+                        >
                         <MenuItem value="StarRating">Star Rating</MenuItem>
-                        <MenuItem value="multiple-choice">Multiple Choice</MenuItem>
+                        <MenuItem value="MultipleChoice">Multiple Choice</MenuItem>
                         <MenuItem value="CommentsBox">Comments Box</MenuItem>
                     </Select>
+                    </DialogContent>
+                    <DialogContent>
+                        <QuestionTypeFactory type={currentVal}/>
                     </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
