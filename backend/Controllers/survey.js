@@ -37,7 +37,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
 
   var promises = [] //create an array to store the promises we want to wait on. we are going to add all the question and trigger add commands here
 
-  //save all the questions
+  //save all the questions -- need to turn this into a helper function
   promises.push(oldBody.questions.map(async (question) => { //go through each question that needs to be saved. async function executes them all in parallel. waits until they all complete
     newQuestion = await Question.create(question) //transform the question into a document based on the question schema models, 
     survey.questions.push(newQuestion); //add that question to the array that we will save to the database
