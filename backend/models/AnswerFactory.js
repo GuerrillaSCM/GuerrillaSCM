@@ -5,8 +5,10 @@ When new answer types are added, they will need to have their schemas compiled t
 const mongoose = require('mongoose');
 const AnswerSchema = require('./answers/Answer');
 const StarAnswerSchema = require('./answers/StarAnswer');
+const CommentBoxAnswerSchema = require('./answers/CommentBoxAnswer');
 
 var Answer = mongoose.model('Answer', AnswerSchema);
 var StarAnswer = Answer.discriminator('StarAnswer', StarAnswerSchema);
+var CommentBoxAnswer = Answer.discriminator('CommentBoxAnswer', CommentBoxAnswerSchema);
 
 module.exports = Answer; //export the root model, this can be used to save all Answers, as well as identify them
