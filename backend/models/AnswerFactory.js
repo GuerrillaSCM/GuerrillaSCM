@@ -6,9 +6,11 @@ const mongoose = require('mongoose');
 const AnswerSchema = require('./answers/Answer');
 const StarAnswerSchema = require('./answers/StarAnswer');
 const CommentBoxAnswerSchema = require('./answers/CommentBoxAnswer');
+const MultipleChoiceAnswerSchema = require('./answers/MultipleChoiceAnswer');
 
 var Answer = mongoose.model('Answer', AnswerSchema);
 var StarAnswer = Answer.discriminator('StarAnswer', StarAnswerSchema);
 var CommentBoxAnswer = Answer.discriminator('CommentBoxAnswer', CommentBoxAnswerSchema);
+var MultipleChoiceAnswer = Answer.discriminator('MultipleChoiceAnswer', MultipleChoiceAnswerSchema);
 
 module.exports = Answer; //export the root model, this can be used to save all Answers, as well as identify them

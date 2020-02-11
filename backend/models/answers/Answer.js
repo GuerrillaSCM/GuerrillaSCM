@@ -10,7 +10,7 @@ const Schema = require('mongoose').Schema;
 
 //compile to a model for the Answer collection in the database
 // This should be scoped to the entire environment after creation, bound to the current mongoose instance.
-module.exports = AnswerSchema = new Schema({
+module.exports = new Schema({
   // _id: mongoose.Schema.Types.ObjectId,
   answerType: {
     type: String,
