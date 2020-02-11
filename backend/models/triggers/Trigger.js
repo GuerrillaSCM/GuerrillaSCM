@@ -11,6 +11,6 @@ module.exports = Schema({ // compile schema to model and export.
     default: 10000
   } //integer > 0 for timer in ms
 }, {
-  collection: 'Question',
-  discriminatorKey: '_type'
+  collection: 'Trigger',
+  discriminatorKey: 'triggerType'
 });

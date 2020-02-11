@@ -16,5 +16,5 @@ module.exports = Schema({ //Compile schema to model and export
   } //Prompt for the question.
 }, {
   collection: 'Question',
-  discriminatorKey: '_type'
+  discriminatorKey: 'questionType'
 });
