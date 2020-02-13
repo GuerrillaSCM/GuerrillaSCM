@@ -18,14 +18,13 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
-import { HomeContextConsumer } from '../Context/HomeContextClass';
-
 //Test 
 import { useHistory } from "react-router-dom";
 
 //redux
 import * as actionTypes from '../../store/actions/actions';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import * as homeActions from '../../store/actions/homeActions';
 
 const tableIcons = {
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -56,10 +55,19 @@ const useStyles = makeStyles(theme => ({
 
 
 /*
-    param: Optional: props.columns
-           props.data (Could be an object that contains the name, status, datacreated........)
+    UPDATE: removed columns from the app state since it doesnt really change
+    Removed the home context consumer here as well.
+    Also, we used to reload the page when we delete an existing survey, we dont do that anymore
 */
 function SurveyTable() {
+
+    const staticColumns = {
+        columns: [
+            { title: 'Name', field: 'title' },
+            { title: 'Published Status', field: 'published' },
+            { title: 'Date Created', field: 'creationTime' },
+        ]
+    }
 
     let history = useHistory();
 
@@ -67,13 +75,10 @@ function SurveyTable() {
 
     const dispatch = useDispatch();
 
+    const homeTest = useSelector(state => state.home);
 
-    /*
-        OnClick we could either put the userId that was clicked 
-        or pass the id prop through the history.
-    */
+
     const switchPage = (url, id, page) => {
-        //console.log("this is id: " + id)
         history.push(
             url + id
         )
@@ -81,64 +86,30 @@ function SurveyTable() {
         dispatch(actionTypes.switchPage(page));
     }
 
-    // const confirmDelete = (deleteRow, rowId) => {
-    //     if(confirm("Delete this survey?")) {
-    //         deleteRow(rowId);
-    //     }
-    //     else {
-
-    //     }
-    // }
-
-    /* 
-        //a potential way we can use objects
-        const [state,setState] = React.useState({})
-        const changeState = () => {
-            setState(props.object);
-        }
-    */
-
-    /*
-        
-    */
-//    const mapStateToProps = state => {
-//         return {
-//             page: state.page_index,
-//         }
-//     };
-
-//     const mapDispatchToProps = dispatch => {
-//         return {
-//             onPageSwitch: (val) => dispatch(actionTypes.switchPage(val))
-//         }
-//     }
-
     return (
-        <div className={classes.root}>
-            <HomeContextConsumer>
-                {({ homeObject, deleteSurveyListener }) => (
+        <div className={classes.root}>          
                     <MaterialTable
                         title="Surveys"
-                        columns={homeObject.columns}
-                        data={homeObject.surveys}
+                        columns={staticColumns.columns}
+                        data={homeTest.surveys}
                         icons={tableIcons}
                         actions={[
                             {
                                 icon: () => <Edit />,
                                 tooltip: 'Edit Survey',
-                                onClick: (event, rowData) => switchPage('/create/', rowData.key,1),
+                                onClick: (event, rowData) => switchPage('/create/', rowData._id,1),
                             },
                             {
                                 icon: () => <VisibilityIcon />,
                                 tooltip: 'View Survey Analytics',
-                                onClick: (event, rowData) => switchPage('/analytics/', rowData.key,2),
+                                onClick: (event, rowData) => switchPage('/analytics/', rowData._id,2),
                             },
                             {
                                 icon: () => <DeleteOutline />,
                                 tooltip: 'Delete Survey',
                                 onClick: (event, rowData) => {
                                     if (window.confirm(`Delete "${rowData.title}" survey?`))
-                                        deleteSurveyListener(rowData.key)
+                                        dispatch(homeActions.deleteSurvey(rowData._id))
                                 }
                             },
                         ]}
@@ -147,8 +118,6 @@ function SurveyTable() {
                             actionsColumnIndex: 4,
                         }}
                     />
-                )}
-            </HomeContextConsumer>
         </div>
     );
 }

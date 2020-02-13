@@ -21,14 +21,26 @@ import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import QuestionTypeFactory from './questionTypesModal/questionTypeFactory'
+//redux
+import {useDispatch } from 'react-redux'
+import * as surveyActions from '../../store/actions/surveyActions'
 
 export default function AddQuestionDialog(props) {
+
+    const dispatch = useDispatch();
 
     const [reqHelperText, setReqHelperText] = React.useState("");
 
     const [isError, setIsError] = React.useState(false);
 
-    const [currentVal, setCurrentval] = React.useState("StarRating");
+    const type = () => {
+        if(props.questionType === undefined || props.questionId === null)
+            return "StarRatingQuestion"
+        else 
+            return props.questionType
+    }
+
+    const [currentVal, setCurrentval] = React.useState(type());
 
     const { open, onClose } = props
 
@@ -48,7 +60,7 @@ export default function AddQuestionDialog(props) {
         onClose();
         setReqHelperText("");
         setIsError(false);
-        setCurrentval("StarRating")
+        setCurrentval("StarRatingQuestion")
     };
 
     //gets called when the add button is pressed
@@ -58,7 +70,15 @@ export default function AddQuestionDialog(props) {
             setIsError(true);
         }
         else {
-            props.onAdd(getQuestionObject());
+            //if(props.buttonText === "Add") {
+                dispatch(surveyActions.addQuestion(getQuestionObject()));
+            //}
+            //else {
+            //  dispatch(surveyActions.editQuestion(getQuestionObject().questionId,getQuestionObject()))
+            //}
+            
+            //props.onAdd(getQuestionObject());
+            setCurrentval("StarRatingQuestion")
             onClose();
         }
     }
@@ -75,6 +95,8 @@ export default function AddQuestionDialog(props) {
             prompt: document.getElementById("question_text").value,
             questionType: document.getElementById("question_type").value,
             questionId: id,
+            key: id,
+            //if multiple choice, get choices.
         });
     }
 
@@ -110,7 +132,7 @@ export default function AddQuestionDialog(props) {
                     <Select
                         fullWidth
                         autoFocus
-                        defaultValue={props.questionType === undefined ? "StarRating" : props.questionType}
+                        defaultValue={props.questionType === undefined ? "StarRatingQuestion" : props.questionType}
                         id='question_type_select'
                         inputProps={{
                             name: 'question_type',
@@ -118,8 +140,8 @@ export default function AddQuestionDialog(props) {
                         }}
                         onClick={(e) => changeValue(e.target.value)}
                         >
-                        <MenuItem value="StarRating">Star Rating</MenuItem>
-                        <MenuItem value="MultipleChoice">Multiple Choice</MenuItem>
+                        <MenuItem value="StarRatingQuestion">Star Rating</MenuItem>
+                        <MenuItem value="MultipleChoiceQuestion">Multiple Choice</MenuItem>
                         <MenuItem value="CommentsBox">Comments Box</MenuItem>
                     </Select>
                     </DialogContent>

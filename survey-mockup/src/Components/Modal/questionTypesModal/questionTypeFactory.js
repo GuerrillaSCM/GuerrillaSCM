@@ -6,9 +6,9 @@ export default function QuestionFactory(props) {
 
     const returnType = (type) => {
         switch(type) {
-            case "MultipleChoice":
+            case "MultipleChoiceQuestion":
                 return <MultipleChoiceType/>;
-            case "StarRating":
+            case "StarRatingQuestion":
                 return <StarRatingType/>;
             default: return <div/>
         }

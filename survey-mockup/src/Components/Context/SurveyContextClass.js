@@ -41,7 +41,7 @@ class SurveyContextProvider extends Component {
         if(id !== "") {
             ApiCall.getASurvey(id)
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 this.setState({
                     title : response.data.title,
                     creationDate : response.data.creationTime,
@@ -125,9 +125,10 @@ class SurveyContextProvider extends Component {
         let survId = "";
         if(this.state.surveyId === undefined) {
             //right now this call only handles surveys from testpacito
-            ApiCall.postSurvey(this.state, "TestPacito").then(response => {
+            ApiCall.postSurvey(this.state, "TheWordMEME").then(response => {
                 survId = response.data.split(" ")[0];
-                window.location.pathname = "/create/"+survId;
+                window.location.href += "/"+survId;
+
             })
         }
         else {

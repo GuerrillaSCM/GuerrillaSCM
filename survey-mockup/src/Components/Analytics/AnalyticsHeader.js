@@ -6,6 +6,8 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 
+import {useSelector} from "react-redux";
+
 const useStyles = makeStyles(theme => ({
     root: {
       padding: theme.spacing(3, 2),
@@ -28,16 +30,28 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function AnalyticsHeader(props) {
+function AnalyticsHeader() {
+
+    const title = useSelector(state => state.analytics.currentSurveyId)
+
+    const surveys = useSelector(state => state.home.surveys);
 
     const classes = useStyles();
+
+    //quick fix, but could work
+    const getSurveyTitle = (surveyId) => {
+        const getTitle = surveys.filter(result => result._id === surveyId);
+        if(getTitle.length > 0) {
+            return getTitle[0].title;
+        }
+    }
 
     return(
         
             <Paper className={classes.root}>
                 <div className={classes.texts}>
                 <Typography variant="h2" gutterBottom >
-                    Analytics <span>{props.title}</span>
+                    {title !== undefined ? getSurveyTitle(title) : "Analytics"}
                 </Typography>
 
                 <Divider className={classes.distance}/>

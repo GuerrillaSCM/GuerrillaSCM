@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actions'
 
 const initialState = {
-    page_index: 0
+    page_index: 0,
+    current_user: "TheWordMEME"//"TestPacito"
 }
 
 const reducer = (state = initialState, action) => {
