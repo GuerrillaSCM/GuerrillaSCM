@@ -45,7 +45,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
       if (err) {
         return console.error(err);
       } else {
-        return console.log("saved question with id: " + newQuestion._id);
+        return console.log("[Question][" + newQuestion._id + "] saved to Question collection");
       }
     });
   }))
@@ -58,7 +58,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
       if (err) {
         return console.error(err);
       } else {
-        return console.log("saved trigger with id: " + newTrigger._id);
+        return console.log("[Trigger][" + newTrigger._id + "] saved to Trigger collection.");
       }
     });
   }))
@@ -76,7 +76,7 @@ exports.postSurveyGivenUserID = async (req, res, next) => {
       return console.error(err);
     } else {
       res.send(result._id + ' Inserted into database')
-      console.log(result._id + " saved to Survey collection.");
+      console.log("[Survey][" + result._id + "] saved to Survey collection.");
     }
   });
 
