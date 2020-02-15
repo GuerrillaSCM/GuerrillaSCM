@@ -10,6 +10,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItem from '@material-ui/core/ListItem';
 import {SurveyContextConsumer} from '../Context/SurveyContextClass'
 import QuestionModal from '../Modal/QuestionModal';
+//redux
+import {useDispatch} from 'react-redux'
+import * as surveyActions from '../../store/actions/surveyActions'
 
 /*
     param: props.question (Question text)
@@ -19,6 +22,8 @@ import QuestionModal from '../Modal/QuestionModal';
 */
 
 export default function SurveyQuestionList(props) {
+
+    const dispatch = useDispatch();
 
     const [open, setOpen] = useState(false);
 
@@ -47,7 +52,8 @@ export default function SurveyQuestionList(props) {
                 <ListItemSecondaryAction>
                     <SurveyContextConsumer> 
                         {({removeQuestionListener}) => (
-                            <IconButton edge="end" aria-label="delete" onClick={() => removeQuestionListener(props.id)}>
+                            <IconButton edge="end" aria-label="delete" onClick={
+                                () => dispatch(surveyActions.deleteQuestion(props.id))}>
                             <DeleteIcon />
                             </IconButton>
                         )}

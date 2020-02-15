@@ -63,7 +63,7 @@ export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const pageIndex = useSelector(state => state);
+  const pageIndex = useSelector(state => state.appWide);
 
   const dispatch = useDispatch();
 
