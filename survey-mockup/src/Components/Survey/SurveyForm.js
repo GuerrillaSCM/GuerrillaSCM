@@ -8,6 +8,9 @@ Accept props to fill up the survey */
     | Icon  | Question #       | Edit      |
     | Icon  | Question Text    | Button    |
     Potentially get all the information after adding question
+
+    TODO!!!
+    Change icon to star or a multiple choice icon or comment box
 */
 import React from 'react';
 
@@ -18,6 +21,8 @@ import QuestionList from './SurveyQuestionList';
 import { makeStyles } from '@material-ui/core/styles';
 import {useState} from 'react';
 import {SurveyContextConsumer} from '../Context/SurveyContextClass'
+//redux 
+import {useSelector } from 'react-redux'
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,7 +45,7 @@ const useStyles = makeStyles(theme => ({
         question={element.prompt} 
         type={element.questionType}
         id={element.questionId}
-        key={element.questionId}
+        key={element._id}
         />);
   }
 
@@ -49,6 +54,8 @@ const useStyles = makeStyles(theme => ({
     param: props.questions (Question object, should contain all the questions in one object?)
 */  
 export default function SurveyForm(props) {
+
+  const surveyList = useSelector(state => state.create.questions)
 
     const classes = useStyles();
     const [dense, setDense] = useState(false);
@@ -63,7 +70,7 @@ export default function SurveyForm(props) {
             <List dense={dense}>
             <SurveyContextConsumer>
               {({survey}) => 
-                (generateQuestionArray(survey.questions))
+                (generateQuestionArray(surveyList))
               }
             </SurveyContextConsumer>
             </List>

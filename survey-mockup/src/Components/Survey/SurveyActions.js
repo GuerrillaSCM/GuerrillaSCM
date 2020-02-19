@@ -1,11 +1,3 @@
-/* Contains all the buttons with all the functionality
-This might be a beefy js file if we decide to put all of 
-the button handlers here. */
-
-/* 
-  FIXME: surveyName textfield variant="outlined" is not working! 
-         Using default textfield right now
-*/
 
 
 import React from 'react';
@@ -17,6 +9,9 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {SurveyContextConsumer} from '../Context/SurveyContextClass'
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import * as surveyActions from '../../store/actions/surveyActions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +39,12 @@ const useStyles = makeStyles(theme => ({
            props.publishedStatus
 */
 export default function SurveyActions(props) {
+
+  const dispatch = useDispatch();
+
+  const currentUser = useSelector(state => state.appWide.current_user)
+
+  const newSurveyObject = useSelector(state => state.create)
 
   const [reqHelperText, setReqHelperText] = React.useState("");
 
@@ -78,23 +79,11 @@ export default function SurveyActions(props) {
     return true;
   }
 
-  const test = (title) => {
-    console.log(title)
-    return title;
-  }
-
-  const test2 = () => {
-    const title = document.getElementById("surveyName").value
-    return title;
-    // return (const survey.title = document.getElementById("surveyName").value)
-  }
-
-
   return (
     <Paper className={classes.root}>
       <React.Fragment>
         <SurveyContextConsumer>
-          {({survey, surveyChangeListener}) => (
+          {({surveyChangeListener}) => (
             //Potentially wrap the textfield in a form
             <TextField
             error={isError}
@@ -105,32 +94,29 @@ export default function SurveyActions(props) {
             fullWidth
             label="Survey Name"
             helperText={reqHelperText}
-            placeholder = {survey.title}
-            defaultValue={survey.title === undefined ? "": survey.title}
-            onChange={() => surveyChangeListener(
-              survey.title = document.getElementById("surveyName").value
-            )}
+            //placeholder = {survey.title}
+            value={newSurveyObject.title === undefined ? "": newSurveyObject.title}
+            //defaultValue={survey.title === undefined ? "": survey.title} im so fucking stupid
+            onChange={() => dispatch(surveyActions.updateTitle(
+              newSurveyObject.title = document.getElementById("surveyName").value))
+              }
           />
           )}
         </SurveyContextConsumer>
        </React.Fragment>
       <React.Fragment>
-        <SurveyContextConsumer>
-          {({survey}) => (
             <Typography variant="h6" gutterBottom>
             <ul className={classes.noStyle}>
-          <li>Date Created: <span>{survey.creationDate}</span></li>
-          <li>Published Status: <span style={{color: 'red'}}>{survey.isPublished}</span></li>
-              <li>Survey ID: <span>{survey.surveyId}</span></li>
+          <li>Date Created: <span>{newSurveyObject.creationDate}</span></li>
+          <li>Published Status: <span style={{color: 'red'}}>{newSurveyObject.isPublished}</span></li>
+              <li>Survey ID: <span>{newSurveyObject.surveyId}</span></li>
             </ul>
           </Typography>
-          )}
-        </SurveyContextConsumer>
       </React.Fragment>
 
       <React.Fragment>
         <SurveyContextConsumer>
-          {({survey, saveSurveyListener, embedCodeListener}) => (
+          {({saveSurveyListener, embedCodeListener}) => (
             <Grid container spacing={1} direction="column" alignItems="flex-start">
         <Grid item>
             <Button
@@ -144,9 +130,9 @@ export default function SurveyActions(props) {
             variant="contained"
             color="primary"
             size="large"
-            disabled={isPopulated(survey)}
+            disabled={isPopulated(newSurveyObject)}
             className={classes.marginAlign}
-            onClick={() => saveSurveyListener()}
+            onClick={() => dispatch(surveyActions.saveSurvey(newSurveyObject,currentUser))}
             >Save</Button>
         </Grid>
         <Grid item>     
@@ -168,8 +154,8 @@ export default function SurveyActions(props) {
             variant="contained"
             color="secondary"
             size="large"
-            onClick={() => embedCodeListener()}
-            disabled={isPopulated(survey)}
+            onClick={() => dispatch(surveyActions.getEmbed(newSurveyObject.surveyId))}
+            disabled={isPopulated(newSurveyObject)}
             className={classes.marginAlign}>Get Embeddable Code</Button>
         </Grid>
       </Grid>

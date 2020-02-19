@@ -8,3 +8,7 @@ IDK How to make issues so ill put it here
 
 Link to demo: 
 [https://master.d19ettj1ll30dy.amplifyapp.com/]
+
+This works but theres an issue with creating a new survey and refreshing the page
+issue is on window.location.pathname or something
+[https://master.dmwaauka98rmq.amplifyapp.com/]

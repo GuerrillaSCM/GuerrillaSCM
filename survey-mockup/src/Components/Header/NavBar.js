@@ -16,6 +16,10 @@ import AnalyticsPage from '../Analytics/AnalyticsPage';
 
 import { Route, Link, Redirect } from 'react-router-dom';
 
+//redux
+import {useSelector, useDispatch} from 'react-redux';
+import * as actionTypes from '../../store/actions/actions'
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,11 +63,18 @@ export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
+  const pageIndex = useSelector(state => state.appWide);
+
+  const dispatch = useDispatch();
+
   /*
     We could also use the current pages url to evaluate which value to switch to
+
+    FIXME: this will do a dispatch
   */
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch(actionTypes.switchPage(newValue));
+    //setValue(newValue);
   };
 
   const testHandler = () => {
@@ -80,13 +91,18 @@ export default function ScrollableTabsButtonForce() {
     );
   }
 
+  const getCurrentValue = (currIndex) => {
+      console.log("Index: " + currIndex);
+  }
+
   return (
     <div className={classes.root}>
       {/* <Redirect exact from="/" to="home" /> */}
       <AppBar position="static" color="primary">
         {/*<Container maxWidth="lg"> */}
           <Tabs
-            value={value}
+          //value should now be a useSelector or someshit
+            value={pageIndex.page_index}
             onChange={handleChange}
             variant="scrollable"
             scrollButtons="on"
@@ -99,9 +115,10 @@ export default function ScrollableTabsButtonForce() {
             FIXME 
               Fix the margins of each rendered page. It looks aweful
             */}
+            {/*Tabs show the icons*/ }
             <Tab label="Home" to="/" component={Link} icon={<HomeIcon />} {...a11yProps(0)} />
-            <Tab label="Survey Creation" to="/create" component={Link} icon={<SurveyIcon />} {...a11yProps(1)} disabled={true} />
-            <Tab label="Analytics" to="/analytics" component={Link} icon={<AnalyticsIcon />} {...a11yProps(2)} disabled={true}/>
+            <Tab label="Survey Creation" to="/create" component={Link} icon={<SurveyIcon />} {...a11yProps(1)} />
+            <Tab label="Analytics" to="/analytics" component={Link} icon={<AnalyticsIcon />} {...a11yProps(2)} />
           </Tabs>
         {/* </Container> */}
       </AppBar>

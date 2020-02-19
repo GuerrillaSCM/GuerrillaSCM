@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import ApiCalls from '../Axios/ApiCall'
 
-import axios from 'axios'
-
 const { Provider, Consumer } = React.createContext();
 
 class HomeContextProvider extends Component {
@@ -37,7 +35,7 @@ class HomeContextProvider extends Component {
     */
     componentDidMount() {
         //Gets all the surveys
-        ApiCalls.getAllSurveys("TestPacito").then(response => {
+        ApiCalls.getAllSurveys("TheWordMEME").then(response => {
             //this shouldnt be here. Get user info once we have one
             if(response.data.length > 0) {
                 this.userItemHandler(response.data[0]);
@@ -86,7 +84,7 @@ class HomeContextProvider extends Component {
     deleteSurveyHandler = (survId) => {
         ApiCalls.deleteSurvey(survId).then(response => {
             this.removeSurveyHandler(survId);
-            window.location.reload(false);
+            //window.location.reload(false);
             console.log(response);   
         }).catch(error => {
             console.log(error)

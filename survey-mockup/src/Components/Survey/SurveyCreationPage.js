@@ -4,10 +4,12 @@
     survey items. 
 */
 
-import React from 'react';
+import React, { useEffect }  from 'react';
 import SurveyActions from './SurveyActions';
 import SurveyForm from './SurveyForm';
 import {SurveyContextProvider} from '../Context/SurveyContextClass';
+import { useDispatch, useSelector } from "react-redux";
+import * as surveyActions from '../../store/actions/surveyActions';
 
 /*
     This class is where we do the requests if we are editing a survey.
@@ -15,43 +17,26 @@ import {SurveyContextProvider} from '../Context/SurveyContextClass';
 */
 export default function SurveyPage (){
     
-    /*
-        TODO: We should pass a prop here
-        
-        
-        constMockObject() {
-            if(fetch is null) {
-                //set null object
-            }
-            else {
-                //set the object from the fetch
-            }
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const url = (window.location.pathname);
+        let id = "";
+        //this means that there is an id that is loaded.
+        dispatch(surveyActions.clearSurvey());
+        if (url.split('/').length === 3) {
+            id = url.split('/')[2];
+            //dispatch to get all survey ids
+            dispatch(surveyActions.loadSurvey(id));
         }
-    */
+    })
 
-    const createNewId = require('uuid/v1');
-
-    // const mockSurveyObject = {
-    //     //surveyId : createNewId(),
-    //     title: "",
-    //     //creationDate: "12/5/2019",
-    //     //isPublished: "No",
-    //     //probably need a mock of this object so we have a blueprint or not? 
-    //     questions : [],
-    //     triggers : [{
-    //         triggerType: "TimerTrigger",
-    //         timer: "10000",
-    //     }]
-            
-        
-    // }
-
-        return(
-            <div className="">
-                <SurveyContextProvider>
-                    <SurveyActions/>
-                    <SurveyForm/>
-                </SurveyContextProvider>
-            </div>
-        );
+    return(
+        <div className="">
+            <SurveyContextProvider>
+                <SurveyActions/>
+                <SurveyForm/>
+            </SurveyContextProvider>
+        </div>
+    );
 }
